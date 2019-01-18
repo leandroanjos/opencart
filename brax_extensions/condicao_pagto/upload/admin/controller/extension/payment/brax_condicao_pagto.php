@@ -1,18 +1,19 @@
 <?php
-class ControllerExtensionPaymentFreeCheckout extends Controller {
+class ControllerExtensionPaymentBraxCondicaoPagto extends Controller {
 	private $error = array();
 
 	public function index() {
-		$this->load->language('extension/payment/free_checkout');
+		$this->load->language('extension/payment/brax_condicao_pagto');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		$this->load->model('setting/setting');
+		$this->load->model('extension/payment/brax_condicao_pagto');
 
-		$this->log->write("Passando pelo Controller de Free Checkout....");
+		$this->log->write("Passando pelo Controller de Condicao de Pagto....");
 		$this->log->write($this->request->post);
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('payment_free_checkout', $this->request->post);
+			$this->model_setting_setting->editSetting('payment_brax_condicao_pagto', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -39,47 +40,44 @@ class ControllerExtensionPaymentFreeCheckout extends Controller {
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('heading_title'),
-			'href' => $this->url->link('extension/payment/free_checkout', 'user_token=' . $this->session->data['user_token'])
+			'href' => $this->url->link('extension/payment/brax_condicao_pagto', 'user_token=' . $this->session->data['user_token'])
 		);
 
-		$data['action'] = $this->url->link('extension/payment/free_checkout', 'user_token=' . $this->session->data['user_token']);
+		$data['action'] = $this->url->link('extension/payment/brax_condicao_pagto', 'user_token=' . $this->session->data['user_token']);
 
 		$data['cancel'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=payment');
 
-		if (isset($this->request->post['payment_free_checkout_order_status_id'])) {
-			$data['payment_free_checkout_order_status_id'] = $this->request->post['payment_free_checkout_order_status_id'];
-		} else {
-			$data['payment_free_checkout_order_status_id'] = $this->config->get('payment_free_checkout_order_status_id');
-		}
-
 		$this->load->model('localisation/order_status');
 
-		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
-
-		if (isset($this->request->post['payment_free_checkout_status'])) {
-			$data['payment_free_checkout_status'] = $this->request->post['payment_free_checkout_status'];
+		if (isset($this->request->post['payment_brax_condicao_pagto_status'])) {
+			$data['payment_brax_condicao_pagto_status'] = $this->request->post['payment_brax_condicao_pagto_status'];
 		} else {
-			$data['payment_free_checkout_status'] = $this->config->get('payment_free_checkout_status');
-		}
-
-		if (isset($this->request->post['payment_free_checkout_sort_order'])) {
-			$data['payment_free_checkout_sort_order'] = $this->request->post['payment_free_checkout_sort_order'];
-		} else {
-			$data['payment_free_checkout_sort_order'] = $this->config->get('payment_free_checkout_sort_order');
+			$data['payment_brax_condicao_pagto_status'] = $this->config->get('payment_brax_condicao_pagto_status');
 		}
 
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['footer'] = $this->load->controller('common/footer');
 
-		$this->response->setOutput($this->load->view('extension/payment/free_checkout', $data));
+		$this->response->setOutput($this->load->view('extension/payment/brax_condicao_pagto', $data));
+	}
+
+	public function install() {
+		$this->load->model('extension/payment/brax_condicao_pagto');
+		$this->model_extension_payment_brax_condicao_pagto->install();
+	}
+
+	public function uninstall() {
+		$this->load->model('extension/payment/brax_condicao_pagto');
+		$this->model_extension_payment_brax_condicao_pagto->uninstall();
 	}
 
 	protected function validate() {
-		if (!$this->user->hasPermission('modify', 'extension/payment/free_checkout')) {
+		if (!$this->user->hasPermission('modify', 'extension/payment/brax_condicao_pagto')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
 		return !$this->error;
 	}
 }
+?>

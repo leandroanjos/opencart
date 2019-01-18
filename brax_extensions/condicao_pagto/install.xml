@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>brax_condicao_pagto_01_01</code>
+    <name>Adicionar o combobox de condição de pagamento no Header</name>
+    <version>1.01</version>
+    <author>Leandro Anjos</author>
+    <link>https://github.com/leandroanjos/opencart</link>   
+	
+	<file path="catalog/controller/common/header.php">
+        <operation>
+            <search><![CDATA[$data['search'] = $this->load->controller('common/search');]]></search>
+            <add position="before"><![CDATA[
+				$data['payment_term'] = $this->load->controller('extension/payment/brax_condicao_pagto');
+            ]]></add>
+        </operation>
+    </file>
+	
+	<file path="catalog/model/account/customer.php">
+        <operation>
+            <search><![CDATA[public function editCode]]></search>
+            <add position="before"><![CDATA[
+				public function setPaymentTerm($customer_id, $customer_group_id) {
+					$this->db->query("UPDATE `" . DB_PREFIX . "customer` SET customer_group_id = " . (int)$customer_group_id . " WHERE customer_id = " .  (int)$customer_id . "");
+				}
+            ]]></add>
+        </operation>
+    </file>
+	
+	<file path="catalog/view/theme/default/template/common/header.twig">
+        <operation>
+            <search><![CDATA[<div id="top-links" class="nav pull-right">]]></search>
+            <add position="before"><![CDATA[
+				{{ payment_term }}
+            ]]></add>
+        </operation>
+    </file>
+	
+	
+	
+</modification>
