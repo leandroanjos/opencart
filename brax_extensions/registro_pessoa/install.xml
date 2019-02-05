@@ -6,23 +6,12 @@
 	<author>Leandro Anjos</author>
 	<link>https://github.com/leandroanjos/opencart</link>   
 	
-	<file path="catalog/controller/account/login.php">			
+	<file path="catalog/controller/account/register.php">			
 		<operation>
-			<search><![CDATA[$this->response->setOutput($this->load->view('account/login', $data));]]></search>
+			<search><![CDATA[$this->load->language('account/register');]]></search>
 			<add position="before"><![CDATA[
 				if ($this->config->get('module_brax_registro_pessoa_status')) {
-					$data['register'] = $this->url->link('extension/module/brax_registro_pessoa', 'language=' . $this->config->get('config_language'));
-				}
-			]]></add>
-			</operation>
-	</file>
-
-	<file path="catalog/controller/common/header.php">			
-		<operation>
-			<search><![CDATA[return $this->load->view('common/header', $data);]]></search>
-			<add position="before"><![CDATA[
-				if ($this->config->get('module_brax_registro_pessoa_status')) {
-					$data['register'] = $this->url->link('extension/module/brax_registro_pessoa', 'language=' . $this->config->get('config_language'));
+					$this->response->redirect($this->url->link('extension/module/brax_registro_pessoa'));
 				}
 			]]></add>
 			</operation>
