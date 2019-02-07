@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <modification>
-	<code>brax_condicao_pagto_01_01</code>
-    <name>Adicionar o combobox de condição de pagamento no Header</name>
-    <version>1.01</version>
+	<code>brax_condicao_pagto_01_02</code>
+    <name>BraxTI - Combobox Tipo de Cliente</name>
+    <version>1.02</version>
     <author>Leandro Anjos</author>
     <link>https://github.com/leandroanjos/opencart</link>   
 	
@@ -10,7 +10,9 @@
         <operation>
             <search><![CDATA[$data['search'] = $this->load->controller('common/search');]]></search>
             <add position="before"><![CDATA[
-				$data['payment_term'] = $this->load->controller('extension/payment/brax_condicao_pagto');
+				if ($this->config->get('module_brax_condicao_pagto_status')) {
+					$data['brax_condicao_pagto'] = $this->load->controller('extension/module/brax_condicao_pagto');
+				}
             ]]></add>
         </operation>
     </file>
@@ -25,16 +27,13 @@
             ]]></add>
         </operation>
     </file>
-	
 	<file path="catalog/view/theme/default/template/common/header.twig">
         <operation>
             <search><![CDATA[<div id="top-links" class="nav pull-right">]]></search>
             <add position="before"><![CDATA[
-				{{ payment_term }}
+				{{ brax_condicao_pagto }}
             ]]></add>
         </operation>
     </file>
 	
-	
-	
-</modification>
+	</modification>

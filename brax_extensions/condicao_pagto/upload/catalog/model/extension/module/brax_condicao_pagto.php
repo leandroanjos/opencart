@@ -1,5 +1,5 @@
 <?php
-class ModelExtensionPaymentBraxCondicaoPagto extends Model {
+class ModelExtensionModuleBraxCondicaoPagto extends Model {
 	public function getPaymentTerms($customer_id) {
 		/*
 		$cache_id = 'brax_condicao_pagto.catalog_' . $customer_id;

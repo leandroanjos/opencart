@@ -1,5 +1,5 @@
 <?php
-class ModelExtensionPaymentBraxCondicaoPagto extends Model {
+class ModelExtensionModuleBraxCondicaoPagto extends Model {
 	public function getLookupByCustomerId($customer_id) {
 		return $this->db->query("SELECT * FROM `" . DB_PREFIX . "brax_payment_term` WHERE `customer_id` = " . (int)$customer_id);
 	}

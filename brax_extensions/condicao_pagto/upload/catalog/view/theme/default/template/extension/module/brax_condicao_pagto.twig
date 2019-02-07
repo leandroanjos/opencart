@@ -1,17 +1,17 @@
-{% if payment_terms|length > 1 %}
+{% if payment_terms|length > 0 %}
 <div class="pull-left">
   <div class="btn-group">
       <button class="btn btn-link dropdown-toggle" data-toggle="dropdown">
         <i class="fa fa-credit-card" alt="{{ text_payment_term }}"></i>     
         {% for payment_term in payment_terms %}
-          {% if payment_term.code == code %}             
-            <i><span>{{ payment_term.name }}</span>
+          {% if payment_term.code == code %}
+            <i><span>{{ payment_term.name }}</span></i>
           {% endif %}
         {% endfor %}  
        &nbsp;<i class="fa fa-caret-down"></i>
       </button>
       <ul class="dropdown-menu">
-        {% for payment_term in payment_terms %}          
+        {% for payment_term in payment_terms %}
           <li>
             <a href="{{ payment_term.href }}">
               <button class="btn btn-link btn-block" type="button" name="{{ payment_term.code }}">

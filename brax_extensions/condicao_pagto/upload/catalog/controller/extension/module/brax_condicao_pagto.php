@@ -1,8 +1,8 @@
 <?php
-class ControllerExtensionPaymentBraxCondicaoPagto extends Controller {
+class ControllerExtensionModuleBraxCondicaoPagto extends Controller {
 	public function index() {
-		$this->load->language('extension/payment/brax_condicao_pagto');
-		$this->load->model('extension/payment/brax_condicao_pagto');
+		$this->load->language('extension/module/brax_condicao_pagto');
+		$this->load->model('extension/module/brax_condicao_pagto');
 		$this->load->model('account/customer');
 		$paymentTerms = array();
 		$customer = array();
@@ -17,7 +17,7 @@ class ControllerExtensionPaymentBraxCondicaoPagto extends Controller {
 			$this->log->write('Customer Group = ' . $customer['customer_group_id'] . '.');
 
 			// Pesquisa as condições liberadas para o cliente
-			$paymentTerms = $this->model_extension_payment_brax_condicao_pagto->getPaymentTerms($customer_id);
+			$paymentTerms = $this->model_extension_module_brax_condicao_pagto->getPaymentTerms($customer_id);
 			
 			// Define o codigo do grupo selecionado para ser utilizado pelo combobox
 			$data['code'] = $customer['customer_group_id'];
@@ -41,17 +41,16 @@ class ControllerExtensionPaymentBraxCondicaoPagto extends Controller {
 
 		foreach ($paymentTerms as $result) {
 			if ($result['name']) {
-				$this->log->write('Teste....'.$result['name']);
 				$data['payment_terms'][] = array(
 					'name' => $result['name'],
 					'code' => $result['customer_group_id'],
-					'href' => $this->url->link('extension/payment/brax_condicao_pagto/select', 'code=' . $result['customer_group_id'] . '&redirect=' . $redirect)
+					'href' => $this->url->link('extension/module/brax_condicao_pagto/select', 'code=' . $result['customer_group_id'] . '&redirect=' . $redirect)
 				);
 			}
 		}
 
 		// Renderiza a view contendo o combobox
-		return $this->load->view('extension/payment/brax_condicao_pagto', $data);
+		return $this->load->view('extension/module/brax_condicao_pagto', $data);
 	}
 
 	public function select() {		
