@@ -11,6 +11,7 @@ class ModelExtensionModuleBraxRegistroPessoa extends Model {
 				`razao_social` VARCHAR(80),
 				`doc` VARCHAR(18) NOT NULL,
 				`rgie` VARCHAR(14),
+				`data_alteracao` DATE NOT NULL,
 				PRIMARY KEY (`registro_id`)
 			) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci;");
 	}
