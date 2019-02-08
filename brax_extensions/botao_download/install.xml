@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>brax_botao_download</code>
+    <name>BraxTI - Botão para página de Download</name>
+    <version>1.00</version>
+    <author>Leandro Anjos</author>
+    <link>https://github.com/leandroanjos/opencart</link>   
+	
+	<file path="catalog/controller/common/header.php">
+        <operation>
+            <search><![CDATA[$data['search'] = $this->load->controller('common/search');]]></search>
+            <add position="before"><![CDATA[
+				if ($this->config->get('module_brax_botao_download_status')) {
+					$data['brax_botao_download'] = $this->load->controller('extension/module/brax_botao_download');
+				}
+            ]]></add>
+        </operation>
+    </file>
+
+	<file path="catalog/view/theme/default/template/common/header.twig">
+        <operation>
+            <search><![CDATA[<li><a href="{{ shopping_cart }}"]]></search>
+            <add position="before"><![CDATA[
+				{{ brax_botao_download }}
+            ]]></add>
+        </operation>
+    </file>
+	
+	</modification>
