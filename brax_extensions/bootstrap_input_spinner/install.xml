@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>brax_bootstrap_input_spinner</code>
+    <name>BraxTI - Bootstrap Input Spinner</name>
+    <version>1.00</version>
+    <author>Virtuosoft</author>
+    <link>https://github.com/istvan-ujjmeszaros/bootstrap-touchspin</link>   
+	
+	<file path="catalog/view/theme/default/template/common/header.twig">
+        <operation>
+            <search><![CDATA[{% for style in styles %}]]></search>
+            <add position="before"><![CDATA[
+				<link href="catalog/view/javascript/touchspin/css/jquery.bootstrap-touchspin.min.css" rel="stylesheet" media="screen" />
+				<script src="catalog/view/javascript/touchspin/js/jquery.bootstrap-touchspin.min.js" type="text/javascript"></script>
+            ]]></add>
+        </operation>
+    </file>
+	
+	</modification>

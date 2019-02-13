@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>brax_quantidade_comprar</code>
+    <name>BraxTI - Quantidade a comprar</name>
+    <version>1.01</version>
+    <author>Leandro Anjos</author>
+    <link>https://github.com/leandroanjos/opencart</link>
+
+	<file path="catalog/view/theme/default/template/product/product.twig">
+        <operation>
+            <search><![CDATA[id="input-quantity" class="form-control" />]]></search>
+            <add position="after"><![CDATA[
+				<script type="text/javascript">
+					$("#input-quantity").TouchSpin({
+					  initval: 1,
+					  buttondown_class: "btn btn-spinner",
+					  buttonup_class: "btn btn-spinner" 
+					});
+				</script>
+            ]]></add>
+        </operation>
+    </file>
+	
+	<file path="catalog/view/theme/default/template/product/search.twig">
+        <operation>
+            <search><![CDATA[$('#button-search').bind('click']]></search>
+            <add position="before"><![CDATA[
+				$( "input[name*='input-quantity']" ).TouchSpin({
+				  initval: 1,
+				  buttondown_class: "btn btn-spinner",
+				  buttonup_class: "btn btn-spinner" 
+				});
+
+				$("button[name*='button-quantity']" ).on('click', function() {
+					var product_id = this.id.replace('button-quantity-', '');
+					var quantity = $("#input-quantity-"+ product_id).val();
+					
+					if (quantity > 0) {
+						// Codigo abaixo substitui a função cart.add() para evitar a rolagem para o inicio da página (scrollTop)
+						// cart.add(product_id , quantity);
+						$.ajax({
+							url: 'index.php?route=checkout/cart/add',
+							type: 'post',
+							data: 'product_id=' + product_id + '&quantity=' + (typeof(quantity) != 'undefined' ? quantity : 1),
+							dataType: 'json',
+							beforeSend: function() {
+								$('#cart > button').button('loading');
+							},
+							complete: function() {
+								$('#cart > button').button('reset');
+							},
+							success: function(json) {
+								$('.alert-dismissible, .text-danger').remove();
+
+								if (json['redirect']) {
+									location = json['redirect'];
+								}
+
+								if (json['success']) {
+									// Mensagem alterada para ser exibida junto ao botão comprar
+									//$('#content').parent().before('<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> ' + json['success'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+									
+									$('#button-quantity-' + product_id).parent().before('<div class="alert alert-success alert-dismissible" style="margin:5px"><i class="fa fa-check-circle"></i> ' + json['success'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+									
+									// Need to set timeout otherwise it wont update the total
+									setTimeout(function () {
+										$('#cart > button').html('<span id="cart-total"><i class="fa fa-shopping-cart"></i> ' + json['total'] + '</span>');
+									}, 100);
+
+									//$('html, body').animate({ scrollTop: 0 }, 'slow');
+
+									$('#cart > ul').load('index.php?route=common/cart/info ul li');
+								}
+							},
+							error: function(xhr, ajaxOptions, thrownError) {
+								alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+							}
+						});
+					}
+				});
+            ]]></add>
+        </operation>
+    </file>
+	
+	<file path="catalog/view/theme/default/template/product/search.twig">
+        <operation>
+            <search><![CDATA[<div class="button-group">]]></search>
+            <add position="replace"><![CDATA[
+				<div style="margin:5px">
+					<div class="input-group">
+						<input type="text" name="input-quantity" value="1" size="3" id="input-quantity-{{ product.product_id }}"  class="form-control" />				
+					</div>
+				</div>
+				<div class="button-group">
+            ]]></add>
+        </operation>
+    </file>
+	
+	<file path="catalog/view/theme/default/template/product/search.twig">
+        <operation>
+            <search><![CDATA[onclick="cart.add('{{ product.product_id }}', '{{ product.minimum }}');"]]></search>
+            <add position="replace"><![CDATA[name="button-quantity" id="button-quantity-{{ product.product_id }}"]]></add>
+        </operation>
+    </file>
+	
+	
+	<file path="catalog/view/theme/default/template/product/category.twig">
+        <operation>
+            <search><![CDATA[{% if not categories]]></search>
+            <add position="before"><![CDATA[
+				<script type="text/javascript">
+					$( "input[name*='input-quantity']" ).TouchSpin({
+					  initval: 1,
+					  buttondown_class: "btn btn-spinner",
+					  buttonup_class: "btn btn-spinner" 
+					});
+
+					$("button[name*='button-quantity']" ).on('click', function() {
+						var product_id = this.id.replace('button-quantity-', '');
+						var quantity = $("#input-quantity-"+ product_id).val();
+						
+						if (quantity > 0) {
+							// Codigo abaixo substitui a função cart.add() para evitar a rolagem para o inicio da página (scrollTop)
+							// cart.add(product_id , quantity);
+							$.ajax({
+								url: 'index.php?route=checkout/cart/add',
+								type: 'post',
+								data: 'product_id=' + product_id + '&quantity=' + (typeof(quantity) != 'undefined' ? quantity : 1),
+								dataType: 'json',
+								beforeSend: function() {
+									$('#cart > button').button('loading');
+								},
+								complete: function() {
+									$('#cart > button').button('reset');
+								},
+								success: function(json) {
+									$('.alert-dismissible, .text-danger').remove();
+
+									if (json['redirect']) {
+										location = json['redirect'];
+									}
+
+									if (json['success']) {
+										// Mensagem alterada para ser exibida junto ao botão comprar
+										//$('#content').parent().before('<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> ' + json['success'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+										
+										$('#button-quantity-' + product_id).parent().before('<div class="alert alert-success alert-dismissible" style="margin:5px"><i class="fa fa-check-circle"></i> ' + json['success'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+										
+										// Need to set timeout otherwise it wont update the total
+										setTimeout(function () {
+											$('#cart > button').html('<span id="cart-total"><i class="fa fa-shopping-cart"></i> ' + json['total'] + '</span>');
+										}, 100);
+
+										//$('html, body').animate({ scrollTop: 0 }, 'slow');
+
+										$('#cart > ul').load('index.php?route=common/cart/info ul li');
+									}
+								},
+								error: function(xhr, ajaxOptions, thrownError) {
+									alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+								}
+							});
+						}
+					});
+				</script>
+            ]]></add>
+        </operation>
+    </file>
+	
+	<file path="catalog/view/theme/default/template/product/category.twig">
+        <operation>
+            <search><![CDATA[<div class="button-group">]]></search>
+            <add position="replace"><![CDATA[
+				<div style="margin:5px">
+					<div class="input-group">
+						<input type="text" name="input-quantity" value="1" size="3" id="input-quantity-{{ product.product_id }}"  class="form-control" />				
+					</div>
+				</div>
+				<div class="button-group">
+            ]]></add>
+        </operation>
+    </file>
+	
+	<file path="catalog/view/theme/default/template/product/category.twig">
+        <operation>
+            <search><![CDATA[onclick="cart.add('{{ product.product_id }}', '{{ product.minimum }}');"]]></search>
+            <add position="replace"><![CDATA[name="button-quantity" id="button-quantity-{{ product.product_id }}"]]></add>
+        </operation>
+    </file>
+	
+</modification>
