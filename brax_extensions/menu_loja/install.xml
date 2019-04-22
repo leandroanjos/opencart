@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>brax_menu_loja</code>
+	<name>BraxTI - Menu de Lojas</name>
+	<version>1.00</version>
+	<author>Leandro Anjos</author>
+	<link>https://github.com/leandroanjos/opencart</link>
+
+	<file path="catalog/controller/common/header.php">
+		<operation>
+		<search><![CDATA[return $this->load->view('common/header', $data);]]></search>
+		<add position="before"><![CDATA[
+			// Inicio da extensão "brax_menu_loja"
+
+			$data['store_id'] = $this->config->get('config_store_id');
+
+			$data['stores'] = array();
+
+			$text_session_id = '';
+
+			if (isset($this->session->data['customer_id'])) {
+				$text_session_id = '&session_id=' . $this->session->getId();
+			}
+
+			$this->load->model('setting/setting');
+			$loja_padrao = $this->model_setting_setting->getSettingValue('config_name', 0);
+
+			$data['stores'][] = array(
+				'store_id' => 0,
+				'name'     => $loja_padrao,
+				'url'      => HTTP_SERVER . 'index.php?route=common/home' . $text_session_id
+			);
+
+			$this->load->model('setting/store');
+
+			$results = $this->model_setting_store->getStores();
+
+			foreach ($results as $result) {
+				$data['stores'][] = array(
+					'store_id' => $result['store_id'],
+					'name'     => $result['name'],
+					'url'      => $result['url'] . 'index.php?route=common/home' . $text_session_id
+				);
+			}
+			// Fim
+		]]></add>
+		</operation>
+	</file>	
+
+	<file path="catalog/view/theme/default/template/common/header.twig">
+		<operation>
+			<search><![CDATA[<div id="top-links" class="nav pull-right">]]></search>
+			<add position="before"><![CDATA[
+				{% if stores|length > 0 %}
+					<div class="pull-left">
+						<div class="btn-group">
+							<button class="btn btn-link dropdown-toggle" data-toggle="dropdown">
+							<i class="fa fa-map-marker" alt="{{ text_store }}"></i>     
+							{% for store in stores %}
+								{% if store.store_id == store_id %}
+								<span>{{ store.name }}</span>
+								{% endif %}
+							{% endfor %}  
+								&nbsp;<i class="fa fa-caret-down"></i>
+							</button>
+							<ul class="dropdown-menu">
+							{% for store in stores %}
+								<li>
+								<a href="{{ store.url }}">
+									<button class="btn btn-link btn-block" type="button" name="store-button-{{ store.store_id }}">
+									<i class="fa fa-map-marker" alt="{{ text_store }}"></i>    
+									&nbsp;{{ store.name }}
+									</button>
+								</a>
+								</li>
+							{% endfor %}
+							</ul>
+						</div>
+					</div>
+				{% endif %}
+			]]></add>
+		</operation>
+  </file>	
+</modification>

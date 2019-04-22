@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>brax_customizacoes_tema</code>
+    <name>BraxTI - Customizações no Tema Padrão</name>
+    <version>1.00</version>
+    <author>Leandro Anjos</author>
+    <link>https://github.com/leandroanjos/opencart</link>
+
+	<file path="catalog/view/theme/default/template/common/menu.twig">
+        <operation>
+            <search><![CDATA[{% for child in children %}]]></search>
+            <add position="before"><![CDATA[
+				{% set category_index = 0 %}
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[<li><a href="{{ child.href }}">{{ child.name }}</a></li>]]></search>
+            <add position="replace"><![CDATA[
+				{% if category_index < 32 %}
+				  {% if category_index is divisible by(8) %}
+					  </ul>
+					  <ul class="list-unstyled">
+						  <li><a href="{{ child.href }}">{{ child.name }}</a></li>
+				  {% elseif category_index == 32 %}
+					  <li><b>...</b></li>
+				  {% else %}
+					  <li><a href="{{ child.href }}">{{ child.name }}</a></li>
+				  {% endif %}
+				  {% set category_index = category_index + 1 %}
+				{% endif %}
+            ]]></add>
+        </operation>
+    </file>
+	
+	<file path="catalog/view/theme/default/template/common/footer.twig">	
+		<operation>
+            <search><![CDATA[<h5>{{ text_extra }}</h5>]]></search>
+            <add position="replace"><![CDATA[ ]]></add>
+        </operation>		
+		<operation>
+            <search><![CDATA[<li><a href="{{ manufacturer }}">{{ text_manufacturer }}</a></li>]]></search>
+            <add position="replace"><![CDATA[ ]]></add>
+        </operation>		
+		<operation>
+            <search><![CDATA[<li><a href="{{ voucher }}">{{ text_voucher }}</a></li>]]></search>
+            <add position="replace"><![CDATA[ ]]></add>
+        </operation>		
+		<operation>
+            <search><![CDATA[<li><a href="{{ affiliate }}">{{ text_affiliate }}</a></li>]]></search>
+            <add position="replace"><![CDATA[ ]]></add>
+        </operation>
+		<operation>
+            <search><![CDATA[<li><a href="{{ special }}">{{ text_special }}</a></li>]]></search>
+            <add position="replace"><![CDATA[ ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[<li><a href="{{ return }}">{{ text_return }}</a></li>]]></search>
+            <add position="replace"><![CDATA[ ]]></add>
+        </operation>	
+		<operation>
+            <search><![CDATA[<li><a href="{{ newsletter }}">{{ text_newsletter }}</a></li>]]></search>
+            <add position="replace"><![CDATA[ ]]></add>
+        </operation>
+    </file>
+	
+</modification>

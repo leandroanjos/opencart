@@ -52,10 +52,18 @@ class ControllerExtensionModuleBraxBotaoDownload extends Controller {
 			$data['module_brax_botao_download_status'] = $this->config->get('module_brax_botao_download_status');
 		}
 
-		if (isset($this->request->post['module_brax_botao_download_information_code'])) {
-			$data['module_brax_botao_download_information_code'] = $this->request->post['module_brax_botao_download_information_code'];
+		if (isset($this->request->post['module_brax_botao_download_information_code_01'])) {
+			$data['module_brax_botao_download_information_code_0'] = $this->request->post['module_brax_botao_download_information_code_0'];
+			$data['module_brax_botao_download_information_code_1'] = $this->request->post['module_brax_botao_download_information_code_1'];
+			$data['module_brax_botao_download_information_code_2'] = $this->request->post['module_brax_botao_download_information_code_2'];
+			$data['module_brax_botao_download_information_code_3'] = $this->request->post['module_brax_botao_download_information_code_3'];
+			$data['module_brax_botao_download_information_code_4'] = $this->request->post['module_brax_botao_download_information_code_4'];
 		} else {
-			$data['module_brax_botao_download_information_code'] = $this->config->get('module_brax_botao_download_information_code');
+			$data['module_brax_botao_download_information_code_0'] = $this->config->get('module_brax_botao_download_information_code_0');
+			$data['module_brax_botao_download_information_code_1'] = $this->config->get('module_brax_botao_download_information_code_1');
+			$data['module_brax_botao_download_information_code_2'] = $this->config->get('module_brax_botao_download_information_code_2');
+			$data['module_brax_botao_download_information_code_3'] = $this->config->get('module_brax_botao_download_information_code_3');
+			$data['module_brax_botao_download_information_code_4'] = $this->config->get('module_brax_botao_download_information_code_4');
 		}
 
 		$data['header'] = $this->load->controller('common/header');
