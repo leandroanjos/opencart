@@ -1,3 +1,3 @@
 <?php
 // Text
-$_['text_title'] = 'Somente Orçamento';
+$_['text_title'] = 'Solicitação de Compra';

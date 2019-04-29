@@ -1,3 +1,3 @@
 <?php
 // Text
-$_['text_title'] = 'Orçamento Brax ERP';
+$_['text_title'] = 'Solicitação Brax ERP';
