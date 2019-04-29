@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>brax_checkout_sem_novo_endereco</code>
+    <name>BraxTI - Checkout sem novo endereço</name>
+    <version>1.00</version>
+    <author>Leandro Anjos</author>
+    <link>https://github.com/leandroanjos/opencart</link>
+
+	<file path="catalog/view/theme/journal3/template/journal3/checkout/address.twig">
+        <operation>
+            <search index="0"><![CDATA[<div class="radio"]]></search>
+            <add position="replace"><![CDATA[<div class="radio" style="display:none"]]></add>
+        </operation>
+        <operation>
+            <search index="1"><![CDATA[<div class="radio"]]></search>
+            <add position="replace"><![CDATA[<div class="radio" style="display:none"]]></add>
+        </operation>
+    </file>
+	
+</modification>
