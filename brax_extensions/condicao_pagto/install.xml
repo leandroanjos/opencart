@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <modification>
-	<code>brax_condicao_pagto_01_02</code>
+	<code>brax_condicao_pagto_01_03</code>
     <name>BraxTI - Combobox Tipo de Cliente</name>
-    <version>1.02</version>
+    <version>1.03</version>
     <author>Leandro Anjos</author>
     <link>https://github.com/leandroanjos/opencart</link>   
 	
 	<file path="catalog/controller/common/header.php">
         <operation>
             <search><![CDATA[$data['search'] = $this->load->controller('common/search');]]></search>
+            <add position="before"><![CDATA[
+				if ($this->config->get('module_brax_condicao_pagto_status')) {
+					$data['brax_condicao_pagto'] = $this->load->controller('extension/module/brax_condicao_pagto');
+				}
+            ]]></add>
+        </operation>
+    </file>
+	
+	<file path="catalog/controller/journal3/checkout.php">
+        <operation>
+            <search><![CDATA[$data['header'] = $this->load->controller('common/header');]]></search>
             <add position="before"><![CDATA[
 				if ($this->config->get('module_brax_condicao_pagto_status')) {
 					$data['brax_condicao_pagto'] = $this->load->controller('extension/module/brax_condicao_pagto');
@@ -31,6 +42,74 @@
         <operation>
             <search><![CDATA[<div id="top-links" class="nav pull-right">]]></search>
             <add position="before"><![CDATA[
+				{{ brax_condicao_pagto }}
+            ]]></add>
+        </operation>
+    </file>
+	
+	
+	<file path="catalog/view/theme/journal3/template/journal3/checkout/checkout.twig">
+        <operation>
+            <search><![CDATA[{{ j3.settings.get('sectionTitlePaymentDetails') }}]]></search>
+            <add position="after"><![CDATA[
+				{{ brax_condicao_pagto }}
+            ]]></add>
+        </operation>
+    </file>
+	
+	<file path="catalog/view/theme/journal3/template/journal3/headers/desktop/classic.twig">
+        <operation>
+            <search><![CDATA[<div class="language-currency top-menu">]]></search>
+            <add position="after"><![CDATA[
+				{{ brax_condicao_pagto }}
+            ]]></add>
+        </operation>
+    </file>
+	<file path="catalog/view/theme/journal3/template/journal3/headers/desktop/compact.twig">
+        <operation>
+            <search><![CDATA[<div class="language-currency top-menu">]]></search>
+            <add position="after"><![CDATA[
+				{{ brax_condicao_pagto }}
+            ]]></add>
+        </operation>
+    </file>
+	<file path="catalog/view/theme/journal3/template/journal3/headers/desktop/mega.twig">
+        <operation>
+            <search><![CDATA[<div class="language-currency top-menu">]]></search>
+            <add position="after"><![CDATA[
+				{{ brax_condicao_pagto }}
+            ]]></add>
+        </operation>
+    </file>
+	<file path="catalog/view/theme/journal3/template/journal3/headers/desktop/slim.twig">
+        <operation>
+            <search><![CDATA[<div class="language-currency top-menu">]]></search>
+            <add position="after"><![CDATA[
+				{{ brax_condicao_pagto }}
+            ]]></add>
+        </operation>
+    </file>
+	
+	<file path="catalog/view/theme/journal3/template/journal3/headers/mobile/header_mobile_1.twig">
+        <operation>
+            <search><![CDATA[<div class="language-currency top-menu">]]></search>
+            <add position="after"><![CDATA[
+				{{ brax_condicao_pagto }}
+            ]]></add>
+        </operation>
+    </file>
+	<file path="catalog/view/theme/journal3/template/journal3/headers/mobile/header_mobile_2.twig">
+        <operation>
+            <search><![CDATA[<div class="language-currency top-menu">]]></search>
+            <add position="after"><![CDATA[
+				{{ brax_condicao_pagto }}
+            ]]></add>
+        </operation>
+    </file>
+	<file path="catalog/view/theme/journal3/template/journal3/headers/mobile/header_mobile_3.twig">
+        <operation>
+            <search><![CDATA[<div class="language-currency top-menu">]]></search>
+            <add position="after"><![CDATA[
 				{{ brax_condicao_pagto }}
             ]]></add>
         </operation>
