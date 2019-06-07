@@ -30,6 +30,14 @@ class ControllerExtensionModuleBraxCondicaoPagto extends Controller {
 
 		if (isset($url_data['route'])) {
 			$route = $url_data['route'];
+
+			if (sizeof($url_data) > 1) {
+				foreach($url_data as $key => $value) {
+					if ($key != 'route') {
+						$route .= '&' . $key . '=' . $value;
+					}
+				}
+			}
 		} else {
 			$route = $this->config->get('action_default');
 		}
