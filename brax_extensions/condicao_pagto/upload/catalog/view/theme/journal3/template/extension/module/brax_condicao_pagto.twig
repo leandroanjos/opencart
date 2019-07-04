@@ -1,30 +1,27 @@
 {% if payment_terms|length > 0 %}
 	<div class="top-menu top-menu-2">
-		<ul class="j-menu">
-			<li class="menu-item top-menu-item dropdown drop-menu">
-				<a class="dropdown-toggle" data-toggle="dropdown" style="font-size:12px;">
-					{% for payment_term in payment_terms %}
-					  {% if payment_term.code == code %}
-						<i class="fa fa-credit-card" alt="{{ text_payment_term }}"></i>
-						&nbsp;						
-						<span class="links-text">{{ payment_term.name }}</span>
-					  {% endif %}
-					{% endfor %}
-				</a>
-				 <div class="dropdown-menu j-dropdown">
-					<ul class="j-menu">
+		<div class="dropdown">
+			<div  style="text-align:center; font-size:12px; width: 160px; padding: 2px; margin-top: 2px; margin-right: 10px;">
+				<div aria-expanded="false" data-toggle="dropdown" class="dropdown-toggle">
+					<i class="fa fa-credit-card" alt="{{ text_payment_term }}"></i>&nbsp;
+					<span style="cursor: pointer; font-size:12px;">
 						{% for payment_term in payment_terms %}
-							<li class="menu-item">
-								<a href="{{ payment_term.href }}">
-									<i class="fa fa-credit-card" alt="{{ text_payment_term }}"></i>
-									&nbsp;
-									<span class="links-text">{{ payment_term.name }}</span>
-								</a>
-							</li>
+						  {% if payment_term.code == code %}
+							{{ payment_term.name }}
+						  {% endif %}
 						{% endfor %}
-					</ul>		
-				 </div>
-			</li>
-		</ul>
+					</span>
+				</div>
+				<ul class="dropdown-menu">
+					{% for payment_term in payment_terms %}
+						<li class="menu-item">
+							<a href="{{ payment_term.href }}">
+								<span class="links-text">{{ payment_term.name }}</span>
+							</a>
+						</li>
+					{% endfor %}
+				</ul>
+			</div>
+		 </div>
 	</div>
 {% endif %}
