@@ -16,6 +16,21 @@
 			]]></add>
 			</operation>
 	</file>
+
+
+	<file path="catalog/model/account/customer.php">			
+			<operation>
+				<search><![CDATA[public function getTotalCustomersByEmail($email)]]></search>
+				<add position="before"><![CDATA[
+					public function getTotalCustomersByDoc($doc) {
+						$query = $this->db->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "brax_registro_pessoa WHERE doc = '" . $this->db->escape(utf8_strtolower($doc)) . "'");
+
+						return $query->row['total'];
+					}
+					]]>
+				</add>
+				</operation>
+		</file>
 	
 	<file path="admin/model/customer/customer_approval.php">			
 		<operation>

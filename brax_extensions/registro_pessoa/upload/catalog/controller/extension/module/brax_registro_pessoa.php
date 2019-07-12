@@ -236,6 +236,10 @@ class ControllerExtensionModuleBraxRegistroPessoa extends Controller {
 			$this->error['warning'] = $this->language->get('error_email_exists');
 		}
 
+		if ($this->model_account_customer->getTotalCustomersByDoc($this->request->post['doc'])) {
+			$this->error['warning'] = $this->language->get('error_doc_exists');
+		}
+
 		if ((utf8_strlen($this->request->post['telephone']) < 3) || (utf8_strlen($this->request->post['telephone']) > 32)) {
 			$this->error['telephone'] = $this->language->get('error_telephone');
 		}
