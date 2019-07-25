@@ -224,7 +224,7 @@ class ControllerExtensionModuleBraxRegistroPessoa extends Controller {
 			$this->error['razaosocial'] = $this->language->get('error_razaosocial');
 		}
 		
-		if ((utf8_strlen(trim($this->request->post['doc'])) < 1) || (utf8_strlen(trim($this->request->post['doc'])) > 18)) {
+		if (!$this->validar_cpf_cnpj($this->request->post['doc'])) {
 			$this->error['doc'] = $this->language->get('error_doc');
 		}
 		
@@ -260,5 +260,56 @@ class ControllerExtensionModuleBraxRegistroPessoa extends Controller {
 		}
 		
 		return !$this->error;
+	}
+
+	private function validar_cpf_cnpj($documento) {
+		if (!isset($documento)) {
+			return false;
+		}
+		// Extrai somente os numeros
+		$numero = preg_replace( '/[^0-9]/', '', $documento );
+
+		// Verifica se foi informada uma sequencia de caracteres
+		if (preg_match('/(\d)\1{10}/', $numero) == false) {
+			if (strlen($numero) == 11) {
+				// Aplica a validação de CPF
+				$cpf = $numero;
+				// Faz o calculo para validar o CPF (https://gist.github.com/rafael-neri/ab3e58803a08cb4def059fce4e3c0e40)
+				for ($t = 9; $t < 11; $t++) {
+					for ($d = 0, $c = 0; $c < $t; $c++) {
+							$d += $cpf{$c} * (($t + 1) - $c);
+					}
+					$d = ((10 * $d) % 11) % 10;
+					if ($cpf{$c} != $d) {
+							return false;
+					}
+				}
+				return true;
+			} else if (strlen($numero) == 14) {
+				// Aplica a validação de CNPJ (https://gist.github.com/guisehn/3276302)
+				$cnpj = $numero;
+
+				// Valida primeiro dígito verificador
+				for ($i = 0, $j = 5, $soma = 0; $i < 12; $i++) {
+					$soma += $cnpj{$i} * $j;
+					$j = ($j == 2) ? 9 : $j - 1;
+				}
+
+				$resto = $soma % 11;
+				if ($cnpj{12} != ($resto < 2 ? 0 : 11 - $resto)) {
+					return false;
+				}
+	
+				// Valida segundo dígito verificador
+				for ($i = 0, $j = 6, $soma = 0; $i < 13; $i++) {
+					$soma += $cnpj{$i} * $j;
+					$j = ($j == 2) ? 9 : $j - 1;
+				}
+				$resto = $soma % 11;
+
+				return $cnpj{13} == ($resto < 2 ? 0 : 11 - $resto);
+			}
+		}
+		return false;
 	}
 }
