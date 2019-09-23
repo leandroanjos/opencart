@@ -41,9 +41,13 @@
 						."\"<br><b>Razão Social: </b>\", brp.`razao_social`,  "
 						."\"<br><b>CPF/CNPJ: </b>\", brp.`doc`, "
 						."\"<br><b>RG/IE: </b>\", brp.`rgie`, "
-						."\"<br><b>Fone: </b>\", c.`telephone`) AS name";
+						."\"<br><b>Fone: </b>\", c.`telephone`, "
+						."\"<br><b>Loja: </b>\", conf.`value`) AS name";
 
-					$str_register_join = "customer_approval` ca  LEFT JOIN `oc_brax_registro_pessoa` brp ON (ca.`customer_id` = brp.`customer_id`)	 ";
+					$str_register_join = "customer_approval` ca "
+						. " LEFT JOIN `oc_brax_registro_pessoa` brp ON (ca.`customer_id` = brp.`customer_id`)	"
+						. " LEFT JOIN `oc_customer` c2 ON (ca.`customer_id` = c2.`customer_id`)	"
+						. " LEFT JOIN `oc_setting` conf ON (c2.`store_id` = conf.`store_id` AND conf.`key` = 'config_name')	";
 						
 					$sql = str_replace("CONCAT(c.`firstname`, ' ', c.`lastname`) AS name", $str_register_name, $sql);
 					$sql = str_replace("customer_approval` ca", $str_register_join, $sql);
