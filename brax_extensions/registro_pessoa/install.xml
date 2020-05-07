@@ -17,7 +17,6 @@
 			</operation>
 	</file>
 
-
 	<file path="catalog/model/account/customer.php">			
 			<operation>
 				<search><![CDATA[public function getTotalCustomersByEmail($email)]]></search>
@@ -29,7 +28,7 @@
 					}
 					]]>
 				</add>
-				</operation>
+			</operation>
 		</file>
 	
 	<file path="admin/model/customer/customer_approval.php">			
@@ -53,6 +52,30 @@
 					$sql = str_replace("customer_approval` ca", $str_register_join, $sql);
 				}
 			]]></add>
-			</operation>
+		</operation>
 	</file>
+	
+	<file path="catalog/controller/checkout/register.php">			
+		<operation>
+			<search><![CDATA[$this->load->language('checkout/checkout');]]></search>
+			<add position="before"><![CDATA[
+				if ($this->config->get('module_brax_registro_pessoa_status')) {
+					$this->response->redirect($this->url->link('extension/module/brax_registro_pessoa'));
+				}
+			]]></add>
+		</operation>
+	</file>
+	
+	<file path="catalog/view/theme/*/template/checkout/checkout.twig">			
+		<operation>
+			<search><![CDATA[$(document).delegate('#button-account', 'click', function() {]]></search>
+			<add position="replace"><![CDATA[
+				$(document).delegate('#button-account', 'click', function() {
+					window.location.href = 'index.php?route=extension/module/brax_registro_pessoa';
+				});
+				$(document).delegate('#button-account-invalid', 'click', function() {
+			]]></add>
+		</operation>
+	</file>
+	
 </modification>

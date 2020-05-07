@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>brax_date_format_ddmmyyyy</code>
+    <name>BraxTI - Altera o formato dos inputs do tipo Data</name>
+    <version>1.00</version>
+    <author>Leandro Anjos</author>
+    <link>https://github.com/leandroanjos/opencart</link>
+
+	<file path="catalog/view/theme/default/template/account/address_form.twig">
+        <operation>
+            <search><![CDATA[data-date-format="YYYY-MM-DD"]]></search>
+            <add position="replace"><![CDATA[data-date-format="DD/MM/YYYY"]]></add>
+        </operation>
+    </file>
+	
+	<file path="catalog/view/theme/default/template/account/affiliate.twig">
+        <operation>
+            <search><![CDATA[data-date-format="YYYY-MM-DD"]]></search>
+            <add position="replace"><![CDATA[data-date-format="DD/MM/YYYY"]]></add>
+        </operation>
+    </file>
+	
+	<file path="catalog/view/theme/default/template/account/edit.twig">
+        <operation>
+            <search><![CDATA[data-date-format="YYYY-MM-DD"]]></search>
+            <add position="replace"><![CDATA[data-date-format="DD/MM/YYYY"]]></add>
+        </operation>
+    </file>
+	
+	<file path="catalog/view/theme/default/template/account/register.twig">
+        <operation>
+            <search><![CDATA[data-date-format="YYYY-MM-DD"]]></search>
+            <add position="replace"><![CDATA[data-date-format="DD/MM/YYYY"]]></add>
+        </operation>
+    </file>
+	
+	<file path="catalog/view/theme/default/template/account/return_form.twig">
+        <operation>
+            <search><![CDATA[data-date-format="YYYY-MM-DD"]]></search>
+            <add position="replace"><![CDATA[data-date-format="DD/MM/YYYY"]]></add>
+        </operation>
+    </file>
+	
+	<file path="catalog/view/theme/default/template/affiliate/register.twig">
+        <operation>
+            <search><![CDATA[data-date-format="YYYY-MM-DD"]]></search>
+            <add position="replace"><![CDATA[data-date-format="DD/MM/YYYY"]]></add>
+        </operation>
+    </file>
+	
+	<file path="catalog/view/theme/default/template/checkout/guest.twig">
+        <operation>
+            <search><![CDATA[data-date-format="YYYY-MM-DD"]]></search>
+            <add position="replace"><![CDATA[data-date-format="DD/MM/YYYY"]]></add>
+        </operation>
+    </file>
+	
+	<file path="catalog/view/theme/default/template/checkout/guest_shipping.twig">
+        <operation>
+            <search><![CDATA[data-date-format="YYYY-MM-DD"]]></search>
+            <add position="replace"><![CDATA[data-date-format="DD/MM/YYYY"]]></add>
+        </operation>
+    </file>
+	
+	<file path="catalog/view/theme/default/template/checkout/payment_address.twig">
+        <operation>
+            <search><![CDATA[data-date-format="YYYY-MM-DD"]]></search>
+            <add position="replace"><![CDATA[data-date-format="DD/MM/YYYY"]]></add>
+        </operation>
+    </file>
+	
+	<file path="catalog/view/theme/default/template/checkout/register.twig">
+        <operation>
+            <search><![CDATA[data-date-format="YYYY-MM-DD"]]></search>
+            <add position="replace"><![CDATA[data-date-format="DD/MM/YYYY"]]></add>
+        </operation>
+    </file>
+	
+	<file path="catalog/view/theme/default/template/checkout/shipping_address.twig">
+        <operation>
+            <search><![CDATA[data-date-format="YYYY-MM-DD"]]></search>
+            <add position="replace"><![CDATA[data-date-format="DD/MM/YYYY"]]></add>
+        </operation>
+    </file>
+	
+	<file path="catalog/view/theme/default/template/product/product.twig">
+        <operation>
+            <search><![CDATA[data-date-format="YYYY-MM-DD"]]></search>
+            <add position="replace"><![CDATA[data-date-format="DD/MM/YYYY"]]></add>
+        </operation>
+    </file>
+	
+</modification>

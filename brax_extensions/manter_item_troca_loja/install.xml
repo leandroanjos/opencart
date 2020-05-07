@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>brax_manter_item_troca_loja</code>
+    <name>BraxTI - Manter itens virtualmente no carrinho ao acessar outra Loja</name>
+    <version>1.00</version>
+    <author>Leandro Anjos</author>
+    <link>https://github.com/leandroanjos/opencart</link>
+
+	<file path="system/library/cart/cart.php">
+        <operation>
+            <search><![CDATA[$this->remove($cart['cart_id']);]]></search>
+            <add position="replace"><![CDATA[$item_remove_from_cart = false;]]></add>
+        </operation>
+    </file>
+	
+</modification>

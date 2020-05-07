@@ -1,0 +1,136 @@
+<modification>
+    <name>Botão Limpar carrinho</name>
+    <version>1.1</version>
+    <link>https://isenselabs.com/posts/clear-shopping-cart-opencart-30</link>
+    <author>iSenseLabs</author>
+    <code>https://github.com/leandroanjos/opencart</code>
+ 
+    <file path="catalog/view/theme/*/template/common/cart.twig">
+        <operation>
+            <search><![CDATA[<a href="{{ cart }}"><strong><i class="fa fa-shopping-cart"></i>]]></search>
+            <add position="replace"><![CDATA[
+            <script type="text/javascript">
+            function clearCart() {
+                $.ajax({
+                  url: 'index.php?route=checkout/cart/clearcart',
+                  dataType: 'json',
+                  success: function(json) {
+                      $('#cart-total').html(json['total']);
+                      if (getURLVar('route') == 'checkout/cart' || getURLVar('route') == 'checkout/checkout') {
+                          location = 'index.php?route=checkout/cart';
+                      } else {
+                          $('#cart > ul').load('index.php?route=common/cart/info ul li');
+                      }
+                  }
+              });
+            }
+            </script>
+            <a style="cursor:pointer;" onclick="clearCart();" ><strong><i class="fa fa-times"></i> {{button_clearcart }}</strong></a>&nbsp;&nbsp;&nbsp;<a href="{{ cart }}"><strong><i class="fa fa-shopping-cart"></i>
+            ]]></add>
+        </operation>
+    </file>
+   
+    <file path="catalog/controller/checkout/cart.php">
+        <operation>
+            <search><![CDATA[public function add() {]]></search>
+            <add position="before"><![CDATA[
+            public function clearcart() {
+                $this->load->language('checkout/cart');
+                $json = array();
+                $this->cart->clear();
+                $total = 0;
+                 
+                unset($this->session->data['vouchers']);
+                unset($this->session->data['shipping_method']);
+                unset($this->session->data['shipping_methods']);
+                unset($this->session->data['payment_method']);
+                unset($this->session->data['payment_methods']);
+                unset($this->session->data['reward']);
+ 
+                $json['total'] = sprintf($this->language->get('text_items'), $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0), $this->currency->format($total, $this->config->get('config_currency')));
+ 
+                if (isset($this->request->get['shoppingcart']) && $this->request->get['shoppingcart']=='true') {
+                    $this->response->redirect($this->url->link('checkout/cart'));
+                } else {
+                    $this->response->addHeader('Content-Type: application/json');
+                    $this->response->setOutput(json_encode($json));
+                }
+            }
+            ]]></add>
+        </operation>
+    </file>
+ 
+    <file path="catalog/controller/common/cart.php">
+        <operation>
+            <search><![CDATA[$this->load->language('common/cart');]]></search>
+            <add position="after"><![CDATA[
+            $data['button_clearcart'] = $this->language->get('button_clearcart');
+            ]]></add>
+        </operation>
+    </file>
+   
+    <file path="catalog/controller/checkout/cart.php">
+        <operation>
+            <search><![CDATA[$this->load->language('checkout/cart');]]></search>
+            <add position="after"><![CDATA[
+            $data['button_clearcart'] = $this->language->get('button_clearcart');
+            $data['link_clearcart'] = $this->url->link('checkout/cart/clearcart', 'shoppingcart=true');
+            ]]></add>
+        </operation>
+    </file>
+   
+    <file path="catalog/language/en-gb/common/cart.php">
+        <operation>
+            <search><![CDATA[$_['text_recurring'] = 'Payment Profile';]]></search>
+            <add position="before"><![CDATA[
+            $_['button_clearcart']  = 'Clear Cart';
+            ]]></add>
+        </operation>
+    </file>
+   
+    <file path="catalog/language/en-gb/checkout/cart.php">
+        <operation>
+            <search><![CDATA[$_['column_total']             = 'Total';]]></search>
+            <add position="before"><![CDATA[
+            $_['button_clearcart']  = 'Clear Cart';
+            ]]></add>
+        </operation>
+    </file>
+	
+	<file path="catalog/language/pt-br/checkout/cart.php">
+        <operation>
+            <search><![CDATA[$_['text_recurring']]]></search>
+            <add position="before"><![CDATA[
+               $_['button_clearcart']  = 'Limpar o Carrinho';
+            ]]></add>
+        </operation>
+     </file>
+ 
+    <file path="catalog/language/pt-br/common/cart.php">
+        <operation>
+            <search><![CDATA[$_['text_recurring']]]></search>
+            <add position="before"><![CDATA[
+            $_['button_clearcart']  = 'Limpar o Carrinho';
+            ]]></add>
+        </operation>
+    </file>
+
+   
+    <file path="catalog/view/theme/*/template/checkout/cart.twig">
+        <operation>
+            <search><![CDATA[{% if modules %}]]></search>
+            <add position="before"><![CDATA[
+                <a href="{{ link_clearcart }}" class="btn btn-default" title="{{button_clearcart}}">{{button_clearcart}}</a>
+            ]]></add>
+        </operation>
+    </file>
+	
+	<file path="catalog/view/theme/journal3/template/checkout/cart.twig">
+        <operation>
+            <search><![CDATA[<div class="panels-total">]]></search>
+            <add position="after"><![CDATA[
+                <a href="{{ link_clearcart }}" title="{{button_clearcart}}">{{button_clearcart}}</a>
+            ]]></add>
+        </operation>
+    </file> 
+</modification>

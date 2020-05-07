@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>brax_checkout_min_max_limit</code>
+	<name>Limite mínimo e máximo para o Checkout</name>
+	<version>1.0.0</version>
+	<author>Leandro Anjos</author>
+	<link>https://github.com/leandroanjos/opencart</link>   
+	<file error="skip" path="admin/language/en-gb/setting/setting.php">
+		<operation error="skip">
+			<search><![CDATA[$_['entry_invoice_prefix']]]></search>
+			<add position="before"><![CDATA[$_['entry_checkout_min']               = 'Valor mínimo para o Checkout';
+				$_['entry_checkout_max']               = 'Valor máximo para o Checkout';
+				$_['entry_checkout_quantity_min']               = 'Quantidade mínima de Unidades para o Checkout';
+				$_['entry_checkout_quantity_max']               = 'Quantidade máxima de Unidades para o Checkout';
+				$_['entry_checkout_min_max_customer_group']      = 'Filtrar Condições de Pagamento por código (Separados por virgulas).';]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$_['help_invoice_prefix']]]></search>
+			<add position="before"><![CDATA[$_['help_checkout_min']               = 'Valor mínimo para que um pedido possa ser aprovado.';
+			$_['help_checkout_max']               = 'Valor máximo para que um pedido possa ser aprovado.';
+			$_['help_checkout_quantity_min']      = 'Quantidade mínima de Unidades para que um pedido possa ser aprovado.';
+			$_['help_checkout_quantity_max']      = 'Quantidade máxima de Unidades para que um pedido possa ser aprovado.';
+			$_['help_checkout_min_max_customer_group']      = 'Filtrar Condições de Pagamento por código (Separados por virgulas).';]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$_['error_voucher_min']]]></search>
+			<add position="before"><![CDATA[$_['error_checkout_min']              = 'Valor Mínimo para o pedido é obrigatório!';
+			$_['error_checkout_max']              = 'Valor Máximo para o pedido é obrigatório!';
+			$_['error_checkout_quantity_min']     = 'Quantidade Mínima de Unidades para o pedido é obrigatório!';
+			$_['error_checkout_quantity_max']     = 'Quantidade Máxima de Unidades para o pedido é obrigatório!';]]></add>
+		</operation>
+	</file>
+
+	<file error="skip" path="admin/controller/setting/setting.php">
+		<operation error="skip">
+			<search><![CDATA[if (isset($this->error['voucher_min'])) {]]></search>
+			<add position="before"><![CDATA[if (isset($this->error['checkout_min'])) {
+			$data['error_checkout_min'] = $this->error['checkout_min'];
+		} else {
+			$data['error_checkout_min'] = '';
+		}
+
+		if (isset($this->error['checkout_max'])) {
+			$data['error_checkout_max'] = $this->error['checkout_max'];
+		} else {
+			$data['error_checkout_max'] = '';
+		}
+		if (isset($this->error['checkout_quantity_min'])) {
+			$data['error_checkout_quantity_min'] = $this->error['checkout_quantity_min'];
+		} else {
+			$data['error_checkout_quantity_min'] = '';
+		}
+
+		if (isset($this->error['checkout_quantity_max'])) {
+			$data['error_checkout_quantity_max'] = $this->error['checkout_quantity_max'];
+		} else {
+			$data['error_checkout_quantity_max'] = '';
+		}]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[if (isset($this->request->post['config_invoice_prefix'])) {]]></search>
+			<add position="before"><![CDATA[if (isset($this->request->post['config_checkout_min'])) {
+			$data['config_checkout_min'] = $this->request->post['config_checkout_min'];
+		} else {
+			$data['config_checkout_min'] = $this->config->get('config_checkout_min');
+		}
+
+		if (isset($this->request->post['config_checkout_max'])) {
+			$data['config_checkout_max'] = $this->request->post['config_checkout_max'];
+		} else {
+			$data['config_checkout_max'] = $this->config->get('config_checkout_max');
+		}
+		
+		if (isset($this->request->post['config_checkout_quantity_min'])) {
+			$data['config_checkout_quantity_min'] = $this->request->post['config_checkout_quantity_min'];
+		} else {
+			$data['config_checkout_quantity_min'] = $this->config->get('config_checkout_quantity_min');
+		}
+
+		if (isset($this->request->post['config_checkout_quantity_max'])) {
+			$data['config_checkout_quantity_max'] = $this->request->post['config_checkout_quantity_max'];
+		} else {
+			$data['config_checkout_quantity_max'] = $this->config->get('config_checkout_quantity_max');
+		}
+		
+		if (isset($this->request->post['config_checkout_min_max_customer_group'])) {
+			$data['config_checkout_min_max_customer_group'] = $this->request->post['config_checkout_min_max_customer_group'];
+		} else {
+			$data['config_checkout_min_max_customer_group'] = $this->config->get('config_checkout_min_max_customer_group');
+		}]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[if (!$this->request->post['config_voucher_min']) {]]></search>
+			<add position="before"><![CDATA[if (!$this->request->post['config_checkout_min']) {
+			$this->error['checkout_min'] = $this->language->get('error_checkout_min');
+		}
+
+		if (!$this->request->post['config_checkout_max']) {
+			$this->error['checkout_max'] = $this->language->get('error_checkout_max');
+		}
+		
+		if (!$this->request->post['config_checkout_quantity_min']) {
+			$this->error['checkout_quantity_min'] = $this->language->get('error_checkout_quantity_min');
+		}
+
+		if (!$this->request->post['config_checkout_max']) {
+			$this->error['checkout_quantity_max'] = $this->language->get('error_checkout_quantity_max');
+		}]]></add>
+		</operation>
+	</file>
+	<file error="skip" path="admin/view/template/setting/setting.twig">
+		<operation error="skip">
+			<search><![CDATA[<legend>{{ text_checkout }}</legend>]]></search>
+			<add position="replace"><![CDATA[<legend>{{ text_checkout }}</legend>
+		<div class="form-group required">
+              <label class="col-sm-2 control-label" for="input-checkout-min"><span data-toggle="tooltip" title="{{ help_checkout_min }}">{{ entry_checkout_min }}</span></label>
+              <div class="col-sm-10">
+                <input type="text" name="config_checkout_min" value="{{ config_checkout_min }}" placeholder="{{ entry_checkout_min }}" id="input-checkout-min" class="form-control" />
+                {% if error_checkout_min %}
+                <div class="text-danger">{{ error_checkout_min }}</div>
+                {% endif %} </div>
+            </div>
+            <div class="form-group required">
+              <label class="col-sm-2 control-label" for="input-checkout-max"><span data-toggle="tooltip" title="{{ help_checkout_max }}">{{ entry_checkout_max }}</span></label>
+              <div class="col-sm-10">
+                <input type="text" name="config_checkout_max" value="{{ config_checkout_max }}" placeholder="{{ entry_checkout_max }}" id="input-checkout-max" class="form-control" />
+                {% if error_checkout_max %}
+                <div class="text-danger">{{ error_checkout_max }}</div>
+                {% endif %} </div>
+            </div>
+			<div class="form-group required">
+              <label class="col-sm-2 control-label" for="input-checkout-quantity-min"><span data-toggle="tooltip" title="{{ help_checkout_quantity_min }}">{{ entry_checkout_quantity_min }}</span></label>
+              <div class="col-sm-10">
+                <input type="text" name="config_checkout_quantity_min" value="{{ config_checkout_quantity_min }}" placeholder="{{ entry_checkout_quantity_min }}" id="input-checkout-quantity-min" class="form-control" />
+                {% if error_checkout_quantity_min %}
+                <div class="text-danger">{{ error_checkout_quantity_min }}</div>
+                {% endif %} </div>
+            </div>
+            <div class="form-group required">
+              <label class="col-sm-2 control-label" for="input-checkout-quantity-max"><span data-toggle="tooltip" title="{{ help_checkout_quantity_max }}">{{ entry_checkout_quantity_max }}</span></label>
+              <div class="col-sm-10">
+                <input type="text" name="config_checkout_quantity_max" value="{{ config_checkout_quantity_max }}" placeholder="{{ entry_checkout_quantity_max }}" id="input-checkout-quantity-max" class="form-control" />
+                {% if error_checkout_quantity_max %}
+                <div class="text-danger">{{ error_checkout_quantity_max }}</div>
+                {% endif %} </div>
+            </div>
+            <div class="form-group required">
+              <label class="col-sm-2 control-label" for="input-checkout-min-max-customer-group"><span data-toggle="tooltip" title="{{ help_checkout_min_max_customer_group }}">{{ entry_checkout_min_max_customer_group }}</span></label>
+              <div class="col-sm-10">
+                <input type="text" name="config_checkout_min_max_customer_group" value="{{ config_checkout_min_max_customer_group }}" placeholder="{{ entry_checkout_min_max_customer_group }}" id="input-checkout-min-max-customer-group" class="form-control" />
+                {% if error_checkout_min_max_customer_group %}
+                <div class="text-danger">{{ error_checkout_min_max_customer_group }}</div>
+                {% endif %} </div>
+            </div>]]></add>
+		</operation>
+	</file>
+	<file error="skip" path="catalog/language/en-gb/checkout/checkout.php">
+		<operation error="skip">
+			<search><![CDATA[$_['error_custom_field']             = '%s required!';]]></search>
+			<add position="after"><![CDATA[$_['error_checkout_min'] = 'Adicione %s ou mais para continuar o Checkout!';
+		$_['error_checkout_max']             = 'A compra excedeu o limite de %s!';]]></add>
+		</operation>
+	</file>
+	<file error="skip" path="catalog/controller/checkout/checkout.php">
+		<operation error="skip">
+			<search><![CDATA[$this->load->language('checkout/checkout');]]></search>
+			<add position="after"><![CDATA[if($this->customer->isLogged()) {
+			$validate_customer_group = false;
+			$customer_group_list = explode(',', $this->config->get('config_checkout_min_max_customer_group'));
+			
+			$this->load->model('account/customer');
+			$session_customer_group_id = 0;
+			
+			if (isset($this->session->data['customer_id'])) {
+				// Pesquisa os dados do cliente
+				$session_customer = $this->model_account_customer->getCustomer($this->session->data['customer_id']);
+				$session_customer_group_id = $session_customer['customer_group_id'];
+			}
+			
+			if (sizeof($customer_group_list) > 0) {
+				foreach ($customer_group_list as $current_customer_group_id) {
+					if ($session_customer_group_id == trim($current_customer_group_id)) {
+						$validate_customer_group = true;
+					}
+				}
+			} else {
+				$validate_customer_group = true;
+			}
+			
+			if ($validate_customer_group == true) {
+				preg_match( '#(\d+).?(\d+)#', $this->currency->format($this->config->get('config_checkout_min'), $this->session->data['currency'], false, false), $checkout_min);
+				preg_match( '#(\d+).?(\d+)#', $this->currency->format($this->config->get('config_checkout_max'), $this->session->data['currency'], false, false), $checkout_max);				
+				preg_match( '#(\d+).?(\d+)#', $this->currency->format($this->cart->getSubTotal(), $this->session->data['currency'], false, false), $sub_total);
+
+				if($sub_total < $checkout_min) {
+					$this->session->data['error'] = sprintf($this->language->get('error_checkout_min'), $this->currency->format($this->config->get('config_checkout_min') - $this->cart->getSubTotal(), $this->session->data['currency']));
+					$this->response->redirect($this->url->link('checkout/cart'));
+				} elseif($sub_total > $checkout_max){
+					$this->session->data['error'] = sprintf($this->language->get('error_checkout_max'), $this->currency->format($this->config->get('config_checkout_max'), $this->session->data['currency']));
+					$this->response->redirect($this->url->link('checkout/cart'));
+				}
+				
+				// Customizacao para limitar a quantidade de unidades
+				$order_quantity_total = 0;
+				foreach ($products as $product_2) {
+					$order_quantity_total += $product_2['quantity'];
+				}
+				
+				if($order_quantity_total < $this->config->get('config_checkout_quantity_min')) {
+					$this->session->data['error'] = sprintf($this->language->get('error_checkout_min'), (($this->config->get('config_checkout_quantity_min') - $order_quantity_total) . " unidades"));
+					$redirect = $this->url->link('checkout/cart');
+				} elseif($order_quantity_total > $this->config->get('config_checkout_quantity_max')){
+					$this->session->data['error'] = sprintf($this->language->get('error_checkout_max'), ($this->config->get('config_checkout_quantity_max') . " unidades"));
+					$redirect = $this->url->link('checkout/cart');
+				}
+			}
+		}]]></add>
+		</operation>
+	</file>
+	<file error="skip" path="catalog/controller/checkout/confirm.php">
+		<operation error="skip">
+			<search><![CDATA[$redirect = '';]]></search>
+			<add position="after"><![CDATA[$this->load->language('checkout/checkout');
+		if($this->customer->isLogged()) {
+			$validate_customer_group = false;
+			$customer_group_list = explode(',', $this->config->get('config_checkout_min_max_customer_group'));
+			
+			$this->load->model('account/customer');
+			$session_customer_group_id = 0;
+			
+			if (isset($this->session->data['customer_id'])) {
+				// Pesquisa os dados do cliente
+				$session_customer = $this->model_account_customer->getCustomer($this->session->data['customer_id']);
+				$session_customer_group_id = $session_customer['customer_group_id'];
+			}
+			
+			if (sizeof($customer_group_list) > 0) {
+				foreach ($customer_group_list as $current_customer_group_id) {
+					if ($session_customer_group_id == trim($current_customer_group_id)) {
+						$validate_customer_group = true;
+					}
+				}
+			} else {
+				$validate_customer_group = true;
+			}
+			
+			if ($validate_customer_group == true) {
+			
+				preg_match( '#(\d+).?(\d+)#', $this->currency->format($this->config->get('config_checkout_min'), $this->session->data['currency'], false, false), $checkout_min);
+				preg_match( '#(\d+).?(\d+)#', $this->currency->format($this->config->get('config_checkout_max'), $this->session->data['currency'], false, false), $checkout_max);				
+				preg_match( '#(\d+).?(\d+)#', $this->currency->format($this->cart->getSubTotal(), $this->session->data['currency'], false, false), $sub_total);
+				
+				if($sub_total < $checkout_min) {
+					$this->session->data['error'] = sprintf($this->language->get('error_checkout_min'), $this->currency->format($this->config->get('config_checkout_min') - $this->cart->getSubTotal(), $this->session->data['currency']));
+					$redirect = $this->url->link('checkout/cart');
+				} elseif($sub_total > $checkout_max){
+					$this->session->data['error'] = sprintf($this->language->get('error_checkout_max'), $this->currency->format($this->config->get('config_checkout_max'), $this->session->data['currency']));
+					$redirect = $this->url->link('checkout/cart');
+				}
+				
+				// Customizacao para limitar a quantidade de unidades
+				$order_quantity_total = 0;
+				foreach ($products as $product_2) {
+					$order_quantity_total += $product_2['quantity'];
+				}
+				
+				if($order_quantity_total < $this->config->get('config_checkout_quantity_min')) {
+					$this->session->data['error'] = sprintf($this->language->get('error_checkout_min'), (($this->config->get('config_checkout_quantity_min') - $order_quantity_total) . " unidades"));
+					$redirect = $this->url->link('checkout/cart');
+				} elseif($order_quantity_total > $this->config->get('config_checkout_quantity_max')){
+					$this->session->data['error'] = sprintf($this->language->get('error_checkout_max'), ($this->config->get('config_checkout_quantity_max') . " unidades"));
+					$redirect = $this->url->link('checkout/cart');
+				}
+			}
+		}]]></add>
+		</operation>
+	</file>
+</modification>
