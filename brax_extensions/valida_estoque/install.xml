@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>brax_validacao_estoque</code>
+    <name>BraxTI - Validação Estoque</name>
+    <version>1.00</version>
+    <author>Leandro Anjos</author>
+    <link>https://github.com/leandroanjos/opencart</link>
+
+	<file path="catalog/controller/product/product.php">
+        <operation>
+            <search><![CDATA[=> $option_value['name']]]></search>
+            <add position="replace"><![CDATA[=> $option_value['name'] .  "   ( Estoque: " . $option_value['quantity'] . " UN )  "]]></add>
+        </operation>
+        
+    </file>
+	
+	<file path="catalog/controller/checkout/cart.php">
+		<operation>
+            <search><![CDATA[if ($product_option['required'] && empty($option[$product_option['product_option_id']]))]]></search>
+            <add position="before"><![CDATA[
+				if ($product_option['required']) {
+					$product_option_id = $product_option['product_option_id'];
+					$product_option_value = $option[$product_option_id];
+					if (empty($product_option_value)) {
+						$json['error']['option'][$product_option['product_option_id']] = sprintf($this->language->get('error_required'), $product_option['name']);
+					} else {
+						foreach ($product_option['product_option_value'] as $option_value) {
+							if ($option_value['product_option_value_id'] == $product_option_value && $option_value['quantity'] < $quantity) {
+								$json['error']['option'][$product_option['product_option_id']] = "Quantidade acima do disponivel.";
+							}
+						}
+					}
+				}
+            ]]></add>
+        </operation>
+		<operation>
+            <search><![CDATA[if (isset($this->request->post['option']))]]></search>
+            <add position="before"><![CDATA[
+				if ($product_info['quantity'] != null && $product_info['quantity'] < $quantity) {
+					$json['error']['quantity'] = "Quantidade acima do estoque disponivel.";
+				}
+            ]]></add>
+        </operation>
+    </file>
+	<file path="catalog/view/theme/*/template/product/product.twig">
+		<operation>
+            <search><![CDATA[$('.text-danger').parent().addClass('has-error');]]></search>
+            <add position="before"><![CDATA[
+				if (json['error']['quantity']) {
+					$('#button-cart').after('<div class="text-danger">' + json['error']['quantity'] + '</div>');
+				}
+            ]]></add>
+        </operation>
+    </file>
+	
+</modification>

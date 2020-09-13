@@ -1,0 +1,253 @@
+{{ header }}
+<script type="text/javascript" src="view/javascript/popup/jscolor/jscolor.js"></script>
+<script type="text/javascript" src="view/javascript/popup/summernote/summernote.js"></script>
+<link type="text/css" href="view/javascript/popup/summernote/summernote.css" rel="stylesheet" media="screen" />
+{{ column_left }}
+<!-- Main Container Fluid -->
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form-recaptha" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+    <div class="container-fluid">
+        {% if error_warning %}
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ heading_title }}</h3>
+      </div>
+        <div class="panel-body">
+            <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-recaptha" >
+             <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab_general_settings" class="general-tab" data-toggle="tab">{{ tab_general }}</a></li>
+            <li><a href="#tab_look_settings" class="settings-tab" data-toggle="tab">{{ tab_look }}</a></li>
+          </ul>
+            <div class="layout">
+                <div class="tab-content">
+                    <!---------------------------------- General ---------------------------------->
+                    <div id="tab_general_settings" class="tab-pane active">
+                        <div style="margin-top:12px;" class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-wrench"></i> {{ tab_general }}</h3>
+                            </div>
+                            <div class="panel-body">                                                            
+                                <div class="blfock">
+                                    
+                                    <table style="border-top:none !important;text-align:right;" class="table table-hover">
+                                        <tr>
+                                            <td class="name" style="width: 300px;">
+                                                <label class="control-label">
+                                                    <span class="icon-question-sign" data-toggle="tooltip" data-placement="top" data-original-title="{{ text_general_enable_tooltip }}">
+                                                        {{ text_general_enable }}
+                                                    </span>                                                                
+                                                    </label>
+                                                </td>
+                                                <td class="settings">
+                                                    <select name="popup[general][enable]" class="form-control" style="width:15%;"> 
+                                                        <option value="0"
+                                                                {% if popup['popup']['general'].enable is defined and popup['popup']['general'].enable == 0%}
+                                                                selected
+                                                                {% endif %}
+                                                                >OFF</option>
+                                                        <option value="1"
+                                                                {% if popup['popup']['general'].enable is defined and popup['popup']['general'].enable == 1%}
+                                                                selected
+                                                                {% endif %}
+                                                                >ON</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td class="name" style="width: 300px;">
+                                                    <label class="control-label" style="text-align: left;">
+                                                        <span data-toggle="tooltip"  data-placement="top" data-original-title="{{ text_general_title_tooltip }}">
+                                                            {{ general_text_title }}
+                                                        </span>
+                                                    </label>                                                                
+                                                    
+                                                </td>
+                                                
+                                                <td class='settings' style='text-align: left;'>
+                                                    {% for language in languages %}
+                                                    {% set language_id = language.language_id %}
+                                                    
+                                                    <div class="input-group-addon" style="width: 41px;float: left;margin-right: 10px;border-right: 1px solid #cccccc;">
+                                                        <img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" />
+                                                    </div>
+                                                        <textarea name="popup[general][title{{ language_id }}]"  id="popup[general][title{{ language_id }}]" class="form-control summernote">
+                                                        {% if popup['popup']['general']['title'~language_id] %}
+                                                        {{ popup['popup']['general']['title'~language_id] }}
+                                                        {% else %}
+                                                        {{ popup['popup']['general']['title'].language_id }}
+                                                        {% endif %}
+                                                        </textarea>
+                                                        
+                                                    <br>
+                                                    {% endfor %}
+                                                </td>
+                                                
+                                            </tr>
+                                            
+                                            
+                                            <tr>
+                                            <td class="name" style="width: 300px;">
+                                                <label class="control-label">
+                                                    <span class="icon-question-sign" data-toggle="tooltip" data-placement="top" data-original-title="{{ text_general_type_tooltip }}">
+                                                        {{ text_general_type }}
+                                                    </span>                                                                
+                                                    </label>
+                                                </td>
+                                                <td class="settings">
+                                                    <select name="popup[general][display_type]" class="form-control"> 
+                                                            <option value="0"
+                                                                    {% if popup['popup']['general'].display_type is defined and popup['popup']['general'].display_type == 0%}
+                                                                selected
+                                                                {% endif %}
+                                                                >{{ text_fixed_amount }}</option>
+                                                            <option value="1"
+                                                                    {% if popup['popup']['general'].display_type is defined and popup['popup']['general'].display_type == 1%}
+                                                                selected
+                                                                {% endif %}
+                                                                >{{ text_percentage }}</option>
+                                                            <option value="2"
+                                                                    {% if popup['popup']['general'].display_type is defined and popup['popup']['general'].display_type == 2%}
+                                                                selected
+                                                                {% endif %}
+                                                                >{{ text_per_week }}</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                        
+                                        <tr><td></td><td class="right-td" id="field_error" style="color:red"></td></tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                    <div id="tab_look_settings" class="tab-pane">                                    
+                        <div style="margin-top:12px;" class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-eye"></i> {{ tab_look }}</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="blfock">
+                                        <table style="border-top:none !important;text-align:right;" class="table table-hover">
+                                            <tr>
+                                                <td class="name" style="width: 300px;">
+                                                    <label class="control-label">
+                                                        <span  data-toggle="tooltip"  data-placement="top" data-original-title="{{ text_general_popup_background_tooltip }}">
+                                                            {{ general_text_popup_background }}
+                                                        </span>                                                                
+                                                    </label>
+                                                </td>
+                                                <td class='settings' style='text-align: left;'>
+                                                    <input name="popup[look][background_color]" class="color {pickerPosition:'right',hash:true} form-control" value="{{ popup['popup']['look'].background_color }}" style="width:76px;">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="name" style="width: 300px;">
+                                                    <label class="control-label">
+                                                        <span  data-toggle="tooltip"  data-placement="top" data-original-title="{{ text_covid_background_image }}">
+                                                            {{ text_covid_background_image }}
+                                                        </span>                                                                
+                                                    </label>
+                                                </td>
+                                                <td class='settings' style='text-align: left;'>
+                                                    <div class="col-sm-6"><a href="" id="thumb-image" data-toggle="image" class="img-thumbnail"><img src="{{ thumb }}" alt="" title="" data-placeholder="{{ placeholder }}" /></a>
+                                                        <input type="hidden" id="covid_background_image" name="popup[look][background_image]" value="{{ popup['popup']['look'].background_image }}" />
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="name">
+                                                    <label class="control-label">
+                                                        <span  data-toggle="tooltip"  data-placement="top" data-original-title="{{ text_general_title_text_tooltip }}">
+                                                            {{ general_text_title_text }}
+                                                        </span>
+                                                    </label>                                                               
+                                                    
+                                                </td>
+                                                <td class='settings' style='text-align: left;'>
+                                                    <input name="popup[look][title_text_color]" class="color {pickerPosition:'right',hash:true} form-control" value="{{ popup['popup']['look'].title_text_color }}" style="width:76px;">
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        
+                                    </div>
+                            </div>                                           
+                        </div>                                      
+                    </div>
+                    
+                </div>
+                    <div style="text-align: center; color: red" id="div_error"></div>
+            </div>
+        </form>
+        </div>
+    </div>
+    </div>
+</div>
+        
+        
+        <script type="text/javascript">
+            $(document).ready(function(){
+              $('.summernote').summernote();
+            $('#button-export').on('click', function() {
+                url = 'index.php?route=module/popup/export&user_token={{ user_token  }}';
+                location = url;
+            });
+             $('.date').datetimepicker({
+			pickDate: true,
+			pickTime: false
+		});
+            var error_general = '{{ error_general }}';
+            var error_setting = '{{ error_setting }}';
+            $('.general-tab').removeClass('general-tab-error');
+            $('.settings-tab').removeClass('settings-tab-error');
+            if(error_general == 1){
+                $('.general-tab').addClass('general-tab-error');
+            }
+            if(error_setting == 1){
+                $('.settings-tab').addClass('settings-tab-error');
+            }
+            });
+        </script>
+        <style>
+           .settings-tab-error{
+               background: red !important;
+               color: white !important;
+           }
+           .general-tab-error{
+               background: red !important;
+               color: white !important;
+           }
+           .radio, .checkbox{
+               text-align: left;
+           }
+           .text-danger {
+                color: #f56b6b;
+                text-align: left;
+            }
+            .help-tooltip{
+                display: block;
+                color: #5d5c5c;
+                font-weight: 400;
+                text-align: -webkit-auto;
+            }
+            .help-tooltip:after{
+                display:none; 
+            }
+        </style>
+        {{ footer }}

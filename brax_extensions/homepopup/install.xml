@@ -1,0 +1,427 @@
+<modification>
+  <name><![CDATA[<font color="#15C403"><b>Home Popup</font>]]></name>
+  <code>Home Popup</code>
+  <version>1.0.0.0</version>
+  <author><![CDATA[<font color="#E50223"><b>Algotoall</font>]]></author>
+  <link>https://www.algotoall.in/</link>
+    <file path="catalog/controller/common/header.php">
+    	<operation info="Div for exit popup" error="skip">
+            <search><![CDATA[$data['cart'] = $this->load->controller('common/cart');]]></search>
+			<add position="after"><![CDATA[
+				$this->load->model('setting/setting');
+                $store_id = $this->config->get('config_store_id');
+                $covid = $this->model_setting_setting->getSetting('popup', $store_id);
+                if (isset($covid['popup']['general']['enable']) && $covid['popup']['general']['enable'] == 1) {
+                    if ($covid['popup']['general']['display_type'] == 0) {
+                        $algo_time = 60;
+                    } else if ($covid['popup']['general']['display_type'] == 1) {
+                        $algo_time = 1440;
+                    } else if ($covid['popup']['general']['display_type'] == 2) {
+                        $algo_time = 10080;
+                    } else if ($covid['popup']['general']['display_type'] == 3) {
+                        $algo_time = 43800;
+                    } else {
+                        $algo_time = 60;
+                    }
+                    $data['algo_time'] = $algo_time;
+                    $data['module_popup_status'] = $covid['popup']['general']['enable'];
+                    //echo '<pre>';print_r($covid);echo '</pre>';die;
+                    if(isset($covid['popup']['look']['background_image']) && $covid['popup']['look']['background_image'] != ''){
+                      $data['img_path'] = HTTP_SERVER . 'image/' . $covid['popup']['look']['background_image'];  
+                    }else{
+                        $data['img_path'] =  HTTP_SERVER . 'image/algocovid/default.png';
+                    }
+                    //echo '<pre>';print_r($kb_time);echo '</pre>';die;
+                    $data['title_text_color'] = $covid['popup']['look']['title_text_color'];
+                    $data['background_color'] = $covid['popup']['look']['background_color'];
+                    $lang = (int)$this->config->get('config_language_id'); 
+                    $key = 'title'.$lang;
+                    $data['kb_data'] = html_entity_decode($covid['popup']['general'][$key]);
+                    //echo "<pre>";print_r($data['kb_data']);echo "</pre>";die;
+                    $data['cross_img_path'] = HTTP_SERVER . 'image/algocovid/close.png';
+                }
+                ]]></add>
+				</operation>
+	</file>
+	<file path="catalog/view/theme/*/template/common/header.twig">
+		<operation error="skip">
+            <search><![CDATA[<body>]]></search>
+			<add position="after"><![CDATA[
+				{% if module_popup_status %}
+    <div id="kb_covidpopup_container">
+    <div id="algocovidpopup-modal-backdropDiv" class="kbcovidpopup-modal-backdrop" style="display:none" ></div>
+    <div class="algocovidpopup_container" style="display:none">
+        <div class="algocovidpopup_modal animated zoomInUp" style="background-image:url({{ img_path }});border: 1px solid {{ background_color }}">
+            <div class="algocovidpopup_modal_content_section">
+                <div class="close_covidpopup_modal"><img src="{{ cross_img_path }}"></div>                   
+                <div class="algocovidpopup_modal_body" style="color:{{ title_text_color }}">
+                    {{ kb_data }}    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+.kb_covid_header{
+    color: white;
+    font-size: 30px;
+    margin-top: 30px;
+}
+.kb_covid_content{
+    width: 62%;
+    float: right;
+}
+.kb_covid_data{
+    color: white;
+    font-size: 18px;
+    margin-top: 30px;
+    line-height:30px;
+    text-align: left; 	
+}
+.algocovidpopup_container {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1050;
+	    overflow: auto;
+}
+.algocovidpopup_modal {
+    width: 680px;
+    margin: 6% auto 0;
+    position: relative;
+    background: #3fcddb;
+    padding: 30px;
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: 0 0 1px #383636;
+    transition: 0.75s ease;
+    background-repeat: no-repeat;
+    background-size: cover;
+	box-shadow: 0 0 12px 2px #272727;
+}
+.algocovidpopup_modal_content_section {    
+    padding: 0 40px;
+    box-sizing: border-box;
+}
+.algocovidpopup_modal_header h4 {
+    font-family: 'Estrangelo Edessa';
+    padding: 20px 10px;
+    text-align: center;
+    font-size: 32px;
+    margin: 0;
+    font-weight:500;
+    text-transform: none;
+}
+.algocovidpopup_modal_left, .algocovidpopup_modal_right {
+    width: 100%;
+    display: inline-block;
+	vertical-align: middle;
+}
+.algocovidpopup_modal_right {
+    float: right;
+}
+.algocovidpopup_modal_left .algocovidpopup_modal_left_content {
+    background: #ffffff;
+	color:#000;
+    padding: 15px 15px 10px;
+    margin-left: 0px;
+    border-radius: 10px;
+    position: relative;
+    border-top-left-radius: 0;
+	font-family: 'Eras Medium ITC';
+	font-weight: 500;
+}
+
+.algocovidpopup_modal_left_content h5 {
+    font-family: 'Eras Medium ITC';
+    font-size: 22px;
+    margin: 0;
+    text-align: center;
+    max-width: 100%;
+    color: #000;
+    margin: 0 auto 25px; 
+font-weight: 600;
+text-transform: none;	
+}
+.kbexit_form_group {
+    display: block;
+    margin-bottom: 10px;
+}
+.kbexit_form_group .exit_form_control {
+    background: #fff;
+    border: 1px solid #efefef;
+    width: 100%;
+        padding: 12px 10px;
+    box-sizing: border-box;
+    border-radius: 0px;
+    box-shadow: 2px 1px 11px rgba(0,0,0,0.37);
+    font-size: 16px;
+	min-height:44px;
+}
+.kbexit_form_group label span.astreik {
+    color: #b10000;
+}
+.kbexit_form_group label a, .kbexit_form_group label  {
+    text-decoration: none;
+	color: #000;
+	font-size: 16px;
+    margin-left: 3px;
+	line-height:1;
+	margin-bottom:0;
+}
+
+label.checkbox-icon {
+    display: inline-block;
+    vertical-align: middle;
+	position: relative;
+	
+}
+.checkbox-icon span {
+    width: 14px;
+    height: 14px;
+    border: 2px solid #ccc;
+    border-radius: 3px;
+    vertical-align: middle;
+    display: inline-block;
+    vertical-align: top;
+}
+input[type="checkbox"] + span:after {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 6px;
+    width: 4px;
+    height: 9px;
+	opacity:0;
+    transform: rotate(45deg) scale(0);
+    border-right: 2px solid #ee5252;
+    border-bottom: 2px solid #ee5252;
+    transition: all 0.3s ease;
+    transition-delay: 0.15s;
+    display: inline-block;
+}
+input[type="checkbox"]:checked + span{background:#fff;}
+input[type="checkbox"]:checked + span:after {
+    opacity: 1;
+    transform: rotate(45deg) scale(1);
+}
+.btn.btn-exit-submit {
+    background: #0aaac4;
+    width: 100%;
+    padding: 7px;
+    border: 1px solid #0aaac4;
+    font-weight: normal;
+    font-size: 24px;
+    color: #fff;
+    font-family: 'Estrangelo Edessa';
+}
+.algocovidpopup_modal_right h4 {
+    font-family: 'Gadugi';
+    font-size: 35px;
+    color: #05a8c3;
+    max-width: 100%;
+    text-align: center;
+    margin: 0 auto;
+    text-transform: uppercase;
+    vertical-align: middle;
+}
+.algocovidpopup_modal_right h4 .yellow {
+    color: #edbc48;
+    font-size: 41px;
+    font-family: 'Gadugi';
+}
+.close_covidpopup_modal {
+    position: absolute;
+    right: -21px;
+    top: -21px;
+    cursor: pointer;
+}
+#algocovidpopup-modal-backdropDiv {
+    background: rgba(0,0,0,0.7);
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 1000;
+}
+@-webkit-keyframes zoomInUp {
+  from {
+    opacity: 0;
+    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, 1000px, 0);
+    transform: scale3d(0.1, 0.1, 0.1) translate3d(0, 1000px, 0);
+    -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  }
+
+  60% {
+    opacity: 1;
+    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(0, -60px, 0);
+    transform: scale3d(0.475, 0.475, 0.475) translate3d(0, -60px, 0);
+    -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+  }
+}
+
+@keyframes zoomInUp {
+  from {
+    opacity: 0;
+    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, 1000px, 0);
+    transform: scale3d(0.1, 0.1, 0.1) translate3d(0, 1000px, 0);
+    -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  }
+
+  60% {
+    opacity: 1;
+    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(0, -60px, 0);
+    transform: scale3d(0.475, 0.475, 0.475) translate3d(0, -60px, 0);
+    -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+  }
+}
+
+.zoomInUp {
+  -webkit-animation-name: zoomInUp;
+  animation-name: zoomInUp;
+}
+
+
+.animated {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+@media (prefers-reduced-motion) {
+  .animated {
+    -webkit-animation: unset !important;
+    animation: unset !important;
+    -webkit-transition: none !important;
+    transition: none !important;
+  }
+}
+@media(max-width:767px)
+{
+	.algocovidpopup_modal {
+    width: 90%;
+	}
+	.algocovidpopup_modal{padding:10px;}
+	.algocovidpopup_modal_content_section{padding:0 5px;}
+}
+@media(max-width:480px)
+{
+	.algocovidpopup_modal_left, .algocovidpopup_modal_right {
+		width: 100%;
+	}	
+	.algocovidpopup_modal_right h4 {
+		max-width: 100%;
+		    font-size: 18px;
+			padding: 10px 0;
+	}
+	.algocovidpopup_modal_right h4 .yellow {
+		display: inline-block;
+		    font-size: 30px;
+	}
+	.algocovidpopup_modal_header h4 {
+		padding-bottom: 2px;
+		font-size: 22px;
+	}
+        #kb_popup_save_data{
+            margin-top: 18px !important;
+            font-size: 21px !important;
+            margin-left: 127px !important;
+        }
+}
+a.action.primary {
+  display: inline-block;
+  text-decoration: none;
+}
+a.action.primary:hover,
+a.action.primary:active,
+a.action.primary:focus {
+  text-decoration: none;
+}
+.action.primary {
+  background-image: none;
+  background: #1979c3;
+  border: 1px solid #1979c3;
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-block;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 300;
+  padding: 7px 15px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  vertical-align: middle;
+}
+.action.primary:focus,
+.action.primary:active {
+  background: #006bb4;
+  border: 1px solid #006bb4;
+  color: #ffffff;
+}
+.action.primary:hover {
+  background: #006bb4;
+  border: 1px solid #006bb4;
+  color: #ffffff;
+}
+.action.primary.disabled,
+.action.primary[disabled],
+fieldset[disabled] .action.primary {
+  opacity: 0.5;
+  cursor: default;
+  pointer-events: none;
+}
+.algocovidpopup_modal_body h1,.algocovidpopup_modal_body h2,.algocovidpopup_modal_body h3,.algocovidpopup_modal_body h4,.algocovidpopup_modal_body p{
+    color : {{ title_text_color }} !important;
+}
+.algocovidpopup_modal_body h1, .algocovidpopup_modal_body h3, .algocovidpopup_modal_body h4{
+    color:{{ title_text_color }};
+}
+</style>
+<script>
+
+$(document).ready(function() {
+ var algo_covid_time = '{{ algo_time }}'; 
+    if(getCookie("algo_covid_popup_check") == ""){
+        setCookie("algo_covid_popup_check",1,algo_covid_time);
+        $('#algocovidpopup-modal-backdropDiv').show();
+        $('.algocovidpopup_container').show();
+    }
+    
+    $('.close_covidpopup_modal').click(function(){
+         $('#algocovidpopup-modal-backdropDiv').hide();
+        $('.algocovidpopup_container').hide();
+    })
+    });
+
+function setCookie(cname, cvalue, minute) {
+  var d = new Date();
+  d.setTime(d.getTime() + (minute * 60 * 1000));
+  var expires = "expires="+d.toUTCString();
+  
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+  var name = cname + "=";
+  var ca = document.cookie.split(';');
+  for(var i = 0; i < ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+</script>
+{% endif %}
+           ]]></add>
+        </operation>
+	</file>
+</modification>

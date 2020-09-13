@@ -10,7 +10,7 @@ class ControllerExtensionModuleBraxNotificacao extends Controller {
 		$url_data = $this->request->get;
 
 		if ($this->config->get('module_brax_notificacao_status')) {			
-			if ($url_data['type'] == 'registro_aprovado') {
+			if ($url_data != null && $url_data['type'] != null && $url_data['type'] == 'registro_aprovado') {
 				if ($url_data['email'] != null && $url_data['status'] == '1') {
 					log_message("Notificacao de Registro Aprovado...");
 					$this->load->model('account/customer');
