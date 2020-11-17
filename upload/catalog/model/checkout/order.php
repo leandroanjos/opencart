@@ -238,8 +238,9 @@ class ModelCheckoutOrder extends Model {
 	}
 	
 	public function getOrderProducts($order_id) {
-		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "order_product WHERE order_id = '" . (int)$order_id . "'");
-		
+		$query = $this->db->query("SELECT op.*, p.sku FROM " . DB_PREFIX . "order_product op " 
+			. " INNER JOIN " . DB_PREFIX . "product p ON op.product_id = p.product_id "
+			. " WHERE op.order_id = '" . (int)$order_id . "'");
 		return $query->rows;
 	}
 	
