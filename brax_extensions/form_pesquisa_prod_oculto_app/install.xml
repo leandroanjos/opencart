@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>form_pesquisa_prod_oculto_app</code>
+    <name>BraxTI - Oculta o form de pesquisa de produto no App</name>
+    <version>1.00</version>
+    <author>Leandro Anjos</author>
+    <link>https://github.com/leandroanjos/opencart</link>
+
+    <file path="catalog/controller/product/search.php">
+        <operation>
+            <search><![CDATA[$data['breadcrumbs'] = array();]]></search>
+            <add position="after"><![CDATA[
+            if (isset($this->request->get['origem'])) {
+                $data['hide_form_search'] = "display:none;";
+            } else {
+                $data['hide_form_search'] = "";
+            }]]></add>
+        </operation>
+    </file>
+
+	<file path="catalog/view/theme/journal3/template/product/search.twig">
+        <operation>
+            <search><![CDATA[class="title search-criteria-title"]]></search>
+            <add position="replace"><![CDATA[class="title search-criteria-title" style="{{ hide_form_search }}"]]></add>
+        </operation>
+
+        <operation>
+            <search><![CDATA[<div class="search-form">]]></search>
+            <add position="replace"><![CDATA[<div class="search-form" style="{{ hide_form_search }}">]]></add>
+        </operation>
+
+        <operation>
+            <search><![CDATA[<div class="buttons clearfix">]]></search>
+            <add position="replace"><![CDATA[<div class="buttons clearfix" style="{{ hide_form_search }}">]]></add>
+        </operation>
+
+        <operation>
+            <search><![CDATA[class="title search-products-title"]]></search>
+            <add position="replace"><![CDATA[class="title search-products-title" style="{{ hide_form_search }}"]]></add>
+        </operation>
+    </file>
+	
+</modification>
