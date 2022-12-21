@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>brax_request_deletion</code>
+    <name>BraxTI - Form para solicitar a Exclusão da Conta</name>
+    <version>1.00</version>
+    <author>Leandro Anjos</author>
+    <link>https://github.com/leandroanjos/opencart</link>
+
+	<file path="catalog/controller/account/account.php">
+        <operation>
+            <search><![CDATA[$data['order'] = $this->url->link('account/order']]></search>
+            <add position="before"><![CDATA[
+				$data['requestdeletion'] = $this->url->link('account/requestdeletion', 'language=' . $this->config->get('config_language'));
+			]]></add>
+        </operation>
+    </file>
+
+	<file path="catalog/view/theme/default/template/account/account.twig">
+        <operation>
+            <search><![CDATA[<li><a href="{{ wishlist }}">]]></search>
+            <add position="before"><![CDATA[
+				<li><a href="{{ requestdeletion }}" style="color:darkred" onMouseOver="this.style.color='red'"
+   onMouseOut="this.style.color='darkred'"><strong>Excluir Conta</strong></a></li>
+			]]></add>
+        </operation>
+    </file>	
+</modification>

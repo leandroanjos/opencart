@@ -1,0 +1,2 @@
+Não foi possível instalar via OCMOD, sendo assim, os arquivos foram enviados para o ser via FTP
+e o design da página Minha conta foi modificado via painel administrativo
