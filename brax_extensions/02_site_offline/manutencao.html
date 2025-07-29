@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site em Manutenção</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 50px 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 90%;
+            backdrop-filter: blur(10px);
+        }
+
+        .icon {
+            font-size: 80px;
+            margin-bottom: 30px;
+            color: #667eea;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-weight: 300;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: #7f8c8d;
+            line-height: 1.6;
+        }
+
+        .message {
+            font-size: 1rem;
+            margin-bottom: 40px;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .contact-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .contact-info h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .contact-info p {
+            margin: 8px 0;
+            color: #666;
+        }
+
+        .contact-info a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #ecf0f1;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 4px;
+            animation: loading 3s ease-in-out infinite;
+        }
+
+        @keyframes loading {
+            0% {
+                width: 0%;
+            }
+
+            50% {
+                width: 70%;
+            }
+
+            100% {
+                width: 100%;
+            }
+        }
+
+        .eta {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-top: 10px;
+        }
+
+        .social-links {
+            margin-top: 30px;
+        }
+
+        .social-links a {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .icon {
+                font-size: 60px;
+            }
+
+            .social-links a {
+                display: block;
+                margin: 10px 0;
+            }
+        }
+
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ecf0f1;
+            font-size: 0.8rem;
+            color: #95a5a6;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="icon">🔧</div>
+
+        <h1>Site em Manutenção</h1>
+
+        <p class="subtitle">
+            Estamos trabalhando para melhorar sua experiência
+        </p>
+
+        <div class="message">
+            <p>
+                Nosso site está temporariamente fora do ar para manutenção programada.
+                Estamos implementando melhorias importantes para oferecer a você um
+                serviço ainda melhor.
+            </p>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress"></div>
+        </div>
+
+        <p class="eta">
+            <strong>Previsão de retorno:</strong> Em algumas horas
+        </p>
+
+        <div class="footer">
+            <p>&copy; 2025 Estoque Atacadista. Todos os direitos reservados.</p>
+            <p>Obrigado pela sua paciência!</p>
+        </div>
+    </div>
+
+    <script>
+        // Atualizar o horário de forma dinâmica (opcional)
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('pt-BR');
+            console.log('Última atualização:', timeString);
+        }
+
+        // Atualizar a cada minuto
+        setInterval(updateTime, 60000);
+
+        // Auto-refresh da página a cada 5 minutos (opcional)
+        // setTimeout(() => {
+        //     location.reload();
+        // }, 300000);
+    </script>
+</body>
+
+</html>
