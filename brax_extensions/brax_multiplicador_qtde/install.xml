@@ -1,0 +1,171 @@
+<modification>
+    <code>brax_multiplicador_qtde</code>
+    <name>Brax TI - Coluna Multiplicador de Quantidade</name>
+    <version>1.0.13</version>
+    <author>Brax TI</author>
+    <link>https://github.com/leandroanjos/opencart</link>   
+    
+    <file path="catalog/model/catalog/product.php">
+        <operation>
+            <search><![CDATA[$query->row['stock_status'],]]></search>
+            <add position="after"><![CDATA[
+                'measure_unit'     => $query->row['measure_unit'],
+                'quantity_multiplier'     => $query->row['quantity_multiplier'],
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/model/catalog/products.php">
+        <operation>
+            <search><![CDATA[$query->row['status'],]]></search>
+            <add position="after"><![CDATA[
+                'measure_unit'     => $query->row['measure_unit'],
+                'quantity_multiplier'     => $query->row['quantity_multiplier'],
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/model/journal3/product.php">
+        <operation>
+            <search><![CDATA[$query->row['status'],]]></search>
+            <add position="after"><![CDATA[
+                'measure_unit'     => $query->row['measure_unit'],
+                'quantity_multiplier'     => $query->row['quantity_multiplier'],
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/product/product.php">
+        <operation>
+            <search><![CDATA[$data['discounts'] = array();]]></search>
+            <add position="after"><![CDATA[
+
+                $measureUnit = $product_info['measure_unit'];
+
+                $quantityMultiplier = false;
+                $priceByUnit = false;
+
+                if ($this->customer->isLogged() && $product_info['quantity_multiplier'] != null && $product_info['quantity_multiplier'] > 0.001) {
+                    $quantityMultiplier = $product_info['quantity_multiplier'];
+                
+                    if ((float)$product_info['price']) {
+                        $priceValue = $product_info['price'];
+                        
+                        if ((float)$product_info['special']) {
+                            $priceValue = $product_info['special'];
+                        }
+
+                        $priceByUnit = $this->currency->format(($priceValue / $quantityMultiplier), $this->session->data['currency']);
+                    }
+                }
+
+                $data['measure_unit'] = $measureUnit;
+                $data['quantity_multiplier'] = $quantityMultiplier;
+                $data['price_by_unit']   = $priceByUnit;
+
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/product/category.php">
+        <operation>
+            <search><![CDATA[$data['products'][] = array]]></search>
+            <add position="before"><![CDATA[
+
+                $measureUnit = $result['measure_unit'];
+
+                $quantityMultiplier = false;
+                $priceByUnit = false;
+
+                if ($this->customer->isLogged() && $result['quantity_multiplier'] != null && $result['quantity_multiplier'] > 0.001) {
+                    $quantityMultiplier = $result['quantity_multiplier'];
+                
+                    if ((float)$result['price']) {
+                        $priceValue = $result['price'];
+                        
+                        if ((float)$result['special']) {
+                            $priceValue = $result['special'];
+                        }
+
+                        $priceByUnit = $this->currency->format(($priceValue / $quantityMultiplier), $this->session->data['currency']);
+                    }
+                }
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search><![CDATA[=> $special,]]></search>
+            <add position="after"><![CDATA[
+                'measure_unit'     => $measureUnit,
+                'quantity_multiplier'     => $quantityMultiplier,
+                'price_by_unit'     => $priceByUnit,
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/product/search.php">
+        <operation>
+            <search><![CDATA[$data['products'][] = array]]></search>
+            <add position="before"><![CDATA[
+                $measureUnit = $result['measure_unit'];
+
+                $quantityMultiplier = false;
+                $priceByUnit = false;
+
+                if ($this->customer->isLogged() && $result['quantity_multiplier'] != null && $result['quantity_multiplier'] > 0.001) {
+                    $quantityMultiplier = $result['quantity_multiplier'];
+                
+                    if ((float)$result['price']) {
+                        $priceValue = $result['price'];
+                        
+                        if ((float)$result['special']) {
+                            $priceValue = $result['special'];
+                        }
+
+                        $priceByUnit = $this->currency->format(($priceValue / $quantityMultiplier), $this->session->data['currency']);
+                    }
+                }
+            ]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[=> $special,]]></search>
+            <add position="after"><![CDATA[
+                'measure_unit'     => $measureUnit,
+                'quantity_multiplier'     => $quantityMultiplier,
+                'price_by_unit'     => $priceByUnit,
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/view/theme/journal3/template/journal3/product_card.twig">
+        <operation>
+            <search><![CDATA[{% if product.rating %}]]></search>
+            <add position="before"><![CDATA[
+                {% if product.price_by_unit %}
+                    <div style="text-align:center; font-weight:bold; color: #29293d">
+                        <span style="background-color: #EEECEC; font-size: 11px; text-align:center; padding:4px">
+                        <span>{{ product.price_by_unit }}</span> <span> por {{ product.measure_unit }}</span>
+                        </span>
+                    </div>
+                {% endif %}
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/view/theme/journal3/template/journal3/product/product.twig">
+        <operation>
+            <search><![CDATA[{% if tax %}]]></search>
+            <add position="before"><![CDATA[
+                {% if price_by_unit %}
+                    <div style="font-size:10px;text-align:left;padding-top:8px; font-weight:bold; color: #FFFFFF">
+                        <span style="background-color: #5C8A8A; font-size:12px;text-align:center;padding:4px">
+                        <span>{{ price_by_unit }}</span> <span> por {{ measure_unit }}</span>
+                        </span>
+                    </div>
+                {% endif %}
+            ]]></add>
+        </operation>
+    </file>
+
+    
+</modification>

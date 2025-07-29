@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+  <name>OpenCart v3.0 Facebook Share Patch</name>
+  <code>facebook_share</code>
+  <version>1.1.1</version>
+  <author>OpenCart</author>
+  <link>https://www.opencart.com</link>
+
+  <!-- add to front -->
+  <file path="catalog/controller/common/header.php">
+    <operation>
+      <search><![CDATA[$data['name'] = $this->config->get('config_name');]]></search>
+      <add position="after"><![CDATA[
+      // Facebook share meta tag
+      $this->load->model('tool/image');
+
+      $facebook_share_image_width = 600;
+      $facebook_share_image_height = 315;
+
+      if($this->document->getImage()){
+        $facebook_share_image = $this->model_tool_image->resize($this->document->getImage(), $facebook_share_image_width, $facebook_share_image_height);
+      } else {
+        $facebook_share_image = $this->model_tool_image->resize($this->config->get('config_logo'), $facebook_share_image_width, $facebook_share_image_height);
+      }
+
+      $data['facebook_site_name'] = $data['name'];
+      $data['facebook_share_url'] = ($this->request->server['HTTPS'] ? 'https://' : 'http://') . $this->request->server['HTTP_HOST'] . $this->request->server['REQUEST_URI'];
+      $data['facebook_share_type'] = ($this->document->getType()) ? $this->document->getType() : 'website';
+      $data['facebook_share_title'] = $this->document->getTitle();
+      $data['facebook_share_description'] = $this->document->getDescription();
+      $data['facebook_share_image'] = $facebook_share_image;
+      $data['facebook_share_image_width'] = $facebook_share_image_width;
+      $data['facebook_share_image_height'] = $facebook_share_image_height;
+      $data['facebook_product_price_amount'] = $this->document->getPrice();
+      $data['facebook_product_price_currency'] = 'BLR';
+      ]]></add>
+    </operation>
+  </file>
+
+  <!-- Controller Product Category -->
+  <file path="catalog/controller/product/category.php">
+    <operation>
+      <search><![CDATA[$this->document->setKeywords($category_info['meta_keyword']);]]></search>
+      <add position="after"><![CDATA[
+			$this->document->setImage($category_info['image']);
+      ]]></add>
+    </operation>
+  </file>
+
+  <!-- Controller Product Manufacturer -->
+  <file path="catalog/controller/product/manufacturer.php">
+    <operation>
+      <search><![CDATA[$this->document->setTitle($manufacturer_info['name']);]]></search>
+      <add position="after"><![CDATA[
+			$this->document->setImage($manufacturer_info['image']);
+      ]]></add>
+    </operation>
+  </file>
+
+  <!-- Controller Product Product -->
+  <file path="catalog/controller/product/product.php">
+    <operation>
+      <search><![CDATA[$this->document->setKeywords($product_info['meta_keyword']);]]></search>
+      <add position="after"><![CDATA[
+      $this->document->setType('product');
+			$this->document->setImage($product_info['image']);
+			$this->document->setPrice($this->tax->calculate($product_info['price'], $product_info['tax_class_id'], $this->config->get('config_tax')));
+      ]]></add>
+    </operation>
+  </file>
+
+  <!-- View Common Header -->
+  <file path="catalog/view/theme/*/template/common/header.twig">
+    <operation>
+      <search><![CDATA[<base href="{{ base }}" />]]></search>
+      <add position="after"><![CDATA[
+      <!-- Facebook share -->
+      <meta property="og:site_name" content="{{ facebook_site_name }}" />
+      <meta property="og:url" content="{{ facebook_share_url }}" />
+      <meta property="og:type" content="{{ facebook_share_type }}" />
+      <meta property="og:title" content="{{ facebook_share_title }}" />
+      <meta property="og:description" content="{{ facebook_share_description }}" />
+      <meta property="og:image" content="{{ facebook_share_image }}" />
+      <meta property="og:image:width" content="{{ facebook_share_image_width }}" />
+      <meta property="og:image:height" content="{{ facebook_share_image_height }}" />
+      {% if facebook_share_type == 'product' %}
+      <meta property="og:price:amount" content="{{ facebook_product_price_amount }}" />
+      <meta property="og:price:currency" content="{{ facebook_product_price_currency }}" />
+      {% endif %}
+      ]]></add>
+    </operation>
+  </file>
+
+  <!-- System Library Document -->
+  <file path="system/library/document.php">
+    <operation>
+      <search><![CDATA[private $scripts = array();]]></search>
+      <add position="after"><![CDATA[
+      private $image;
+      private $type;
+    	private $price;
+
+      /** @param	string $image */
+      public function setImage($image) {
+        $this->image = $image;
+      }
+
+      /** @return	string */
+      public function getImage() {
+        return $this->image;
+      }
+
+      /**  @param	string	$type */
+    	public function setType($type) {
+    		$this->type = $type;
+    	}
+
+    	/**  @return	string */
+    	public function getType() {
+    		return $this->type;
+    	}
+
+    	/** @param string	$price */
+    	public function setPrice($price) {
+    		$this->price = $price;
+    	}
+
+    	/** @return	string */
+    	public function getPrice() {
+    		return $this->price;
+    	}
+      ]]></add>
+    </operation>
+  </file>
+
+</modification>
